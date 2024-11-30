@@ -18,7 +18,7 @@ public class DialogueViewer : MonoBehaviour
     [SerializeField] TMPro.TextMeshProUGUI voyanteText;
     [SerializeField] GameObject cardPrefab;
     [SerializeField] GameObject fadePanel;
-    [SerializeField] TMPro.TextMeshProUGUI descriptionText;
+    [SerializeField] SlowTyper descriptionBody;
 
     [Header("Settings")]
     [SerializeField] float voyanteTextDelay = 2.0f;
@@ -54,10 +54,10 @@ public class DialogueViewer : MonoBehaviour
 
     private void OnNodeEntered(Node newNode) {
         if (newNode.isDescription()) {
-            descriptionText.text = newNode.text;
-            StartCoroutine(DelayedAction(0.1f, delegate { controller.ChooseResponse(0); }));
+            ShowDescription(newNode);
             return;
         }
+        descriptionBody.transform.parent.gameObject.SetActive(false);
         if (newNode.isFade()) {
             StartCoroutine(Fade());
             StartCoroutine(ClientExitAnimation());
@@ -71,7 +71,6 @@ public class DialogueViewer : MonoBehaviour
             StartCoroutine(ClientWalkAnimation());
             ChangeClientSkin(newNode.title.Split("_")[0]);
             if (newNode.IsQuestion()) {
-                Debug.Log("Setting cards");
                 if (!newNode.IsNewWeek()) SetCards(newNode);
                 StartCoroutine(DelayedAction(clientWalkTime, delegate { ShowPNJQuestion(newNode); }));
             } else {
@@ -217,7 +216,13 @@ public class DialogueViewer : MonoBehaviour
         txtTitle.transform.parent.gameObject.SetActive(true);
         txtTitle.text = newNode.title.Split("_")[0];
         txtBody.Begin(newNode.text);
-        txtBody.SetFinishAction(delegate { canGetToNextDialogue = true; });
+        txtBody.SetFinishAction(delegate { StartCoroutine(WaitForInputSkip()); });
+    }
+
+    private void ShowDescription(Node newNode) {
+        descriptionBody.transform.parent.gameObject.SetActive(true);
+        descriptionBody.Begin(newNode.text);
+        descriptionBody.SetFinishAction(delegate { StartCoroutine(WaitForInputSkip());});
     }
 
     private IEnumerator WaitUntilNextDialogue(UnityAction action) {
@@ -226,6 +231,13 @@ public class DialogueViewer : MonoBehaviour
             yield return null;
         }
         action();
+    }
+
+    private IEnumerator WaitForInputSkip() {
+        while (!Input.GetKeyDown(KeyCode.Space) && !Input.GetMouseButtonDown(0)) {
+            yield return null;
+        }
+        controller.ChooseResponse(0);
     }
 
     private IEnumerator ClientWalkAnimation() {

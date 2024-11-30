@@ -59,7 +59,7 @@ Le Chariot. La détermination sera la clé du triomphe. Garde le contrôle, le v
 
 :: A1Death [VOYANTE] {"position":"1075,1625","size":"100,100"}
 <!--(set: $A1 to "death") -->
-Vous avez choisi la Mort. La fin d’un cycle s’annonce, n’est pas peur du renouveau et achève ta transformation. 
+Vous avez choisi la Mort. La fin d’un cycle s’annonce, n’ai pas peur du renouveau et achève ta transformation. 
 [[Ado_2]]
 
 :: A1Hermit [VOYANTE] {"position":"925,1625","size":"100,100"}
@@ -84,11 +84,13 @@ C’est en parlant de magie païenne que ton nom s’est fait connaître, pourta
 :: Introduction.1 [DESCRIPTION] {"position":"525,150","size":"100,100"}
 Tout dans cette pièce, de la faible lumière aux rideaux occultants, vous fait comprendre que votre existence doit rester secrète. 
 
+[Clique gauche / Espace pour continuer]
 [[Introduction.2]]
 
 :: Introduction.2 [DESCRIPTION] {"position":"650,150","size":"100,100"}
 Des bruits de pas, quelques murmures dissimulés vous font pressentir que vous serez bientôt l’attraction interdite des curieux les plus aventureux. 
 
+[Clique gauche / Espace pour continuer]
 [[Introduction.3]]
 
 :: Introduction.3 [DESCRIPTION] {"position":"775,150","size":"100,100"}
@@ -111,7 +113,7 @@ De loin, des pas lourds et confiants grondent, s’approchant avec assurance. Un
 
 [[P1.2]]
 
-:: P1.2 [PNJ] {"position":"850,2125","size":"100,100"}
+:: P1.2 [PNJ NEWCLIENT QUESTION] {"position":"850,2125","size":"100,100"}
 <!--(set: $P1 to "")-->
 Melvin, Scorpion, O+
 
@@ -170,11 +172,13 @@ La Mort[[S1Death]]
 :: Salarié_0 [PNJ NEWCLIENT] {"position":"850,275","size":"100,100"}
 Hmm… Comment fonctionne cette machine ?!
 
+[Clique gauche / Espace pour continuer]
 [[Salarié_1]]
 
 :: Salarié_1 [PNJ] {"position":"850,400","size":"100,100"}
 “Décliner son identité… et partager son chagrin.” 
 
+[Clique gauche / Espace pour continuer]
 [[Salarié_2]]
 
 :: Salarié_2 [PNJ] {"position":"850,500","size":"100,100"}
@@ -217,6 +221,8 @@ Vous avez raison, je vais me reprendre en main. Je sais ce qu’il me reste à f
 
 :: Start [START DESCRIPTION] {"position":"400,150","size":"100,100"}
 Vous vous réveillez d’un long sommeil, tandis que des mains inconnues s’activent à vous remettre en marche. Après un long reboot de votre système, vous percevez des bribes d’un futur incertain. 
+
+[Clique gauche / Espace pour continuer]
 
 [[Introduction.1]]
 

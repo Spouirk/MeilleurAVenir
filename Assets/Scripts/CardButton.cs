@@ -25,7 +25,6 @@ public class CardButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler,
     }
 
     public void OnPointerEnter(PointerEventData eventData) {
-        Debug.Log("Mouse over a card");
         isHovering = true;
     }
 

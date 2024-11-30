@@ -92,7 +92,7 @@ public class Card : MonoBehaviour
     }
 
     public void OnMouseHover(bool isOver) {
-        if (!isDragging && isOver && !isFalling) {
+        if (!isDragging && isOver) {
             ZoomOnCard();
             RepositionInBounds();
         } else {
