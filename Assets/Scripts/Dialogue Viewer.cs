@@ -18,6 +18,7 @@ public class DialogueViewer : MonoBehaviour
     [SerializeField] TMPro.TextMeshProUGUI voyanteText;
     [SerializeField] GameObject cardPrefab;
     [SerializeField] GameObject fadePanel;
+    [SerializeField] TMPro.TextMeshProUGUI descriptionText;
 
     [Header("Settings")]
     [SerializeField] float voyanteTextDelay = 2.0f;
@@ -34,10 +35,14 @@ public class DialogueViewer : MonoBehaviour
     [Header("Skins")]
     [SerializeField] Sprite SalaryMan;
     [SerializeField] Sprite Religieux;
+    [SerializeField] Sprite Ado;
+    [SerializeField] Sprite Vache;
 
     [Header("Cards skin")]
     [SerializeField] Sprite cardLovers;
     [SerializeField] Sprite cardChariot;
+
+    public bool canGetToNextDialogue;
 
     // Start is called before the first frame update
     void Start()
@@ -48,6 +53,11 @@ public class DialogueViewer : MonoBehaviour
     }
 
     private void OnNodeEntered(Node newNode) {
+        if (newNode.isDescription()) {
+            descriptionText.text = newNode.text;
+            StartCoroutine(DelayedAction(0.1f, delegate { controller.ChooseResponse(0); }));
+            return;
+        }
         if (newNode.isFade()) {
             StartCoroutine(Fade());
             StartCoroutine(ClientExitAnimation());
@@ -55,20 +65,29 @@ public class DialogueViewer : MonoBehaviour
         if (newNode.IsNewWeek()) {
             ClearCards();
             SpawnCards(newNode);
-        }
-        if (newNode.IsQuestion()) {
-            Debug.Log("Setting cards");
-            SetCards(newNode);
+            InitializeCards(newNode);
         }
         if (newNode.IsNewClient()) {
             StartCoroutine(ClientWalkAnimation());
-            StartCoroutine(DelayedAction(clientWalkTime, delegate { ShowPNJDialogue(newNode); }));
             ChangeClientSkin(newNode.title.Split("_")[0]);
+            if (newNode.IsQuestion()) {
+                Debug.Log("Setting cards");
+                if (!newNode.IsNewWeek()) SetCards(newNode);
+                StartCoroutine(DelayedAction(clientWalkTime, delegate { ShowPNJQuestion(newNode); }));
+            } else {
+                StartCoroutine(DelayedAction(clientWalkTime, delegate { ShowPNJDialogue(newNode); }));
+                StartCoroutine(WaitUntilNextDialogue(delegate { controller.ChooseResponse(0); }));
+            }
+            return;
+        }
+        if (newNode.IsQuestion()) {
+            if (!newNode.IsNewWeek()) SetCards(newNode);
+            ShowPNJQuestion(newNode);
             return;
         }
         if (newNode.IsPNJNode()) {
             ShowPNJDialogue(newNode);
-            StartCoroutine(DelayedAction(2.0f, delegate { controller.ChooseResponse(0); }));
+            StartCoroutine(WaitUntilNextDialogue(delegate { controller.ChooseResponse(0); }));
         }
         if (newNode.IsVoyanteNode()) {
             voyanteText.text = newNode.text;
@@ -89,6 +108,12 @@ public class DialogueViewer : MonoBehaviour
                 break;
             case "Religieux":
                 client.GetComponent<Image>().sprite = Religieux;
+                break;
+            case "Ado":
+                client.GetComponent<Image>().sprite = Ado;
+                break;
+            case "Vache":
+                client.GetComponent<Image>().sprite = Vache;
                 break;
             default:
                 break;
@@ -152,7 +177,7 @@ public class DialogueViewer : MonoBehaviour
         }
     }
 
-    private void SetCards(Node newNode) {
+    private void InitializeCards(Node newNode) {
         for (int i = 0; i < newNode.responses.Count; i++) {
             int currentIndex = i;
             Card card = cards[currentIndex];
@@ -162,17 +187,45 @@ public class DialogueViewer : MonoBehaviour
         }
     }
 
+    private void SetCards(Node newNode) {
+        for (int i = 0; i < newNode.responses.Count; i++) {
+            int currentIndex = i;
+
+            foreach (Card card in cards) {
+                if (card.GetName() == newNode.responses[i].displayText) {
+                    card.SetButtonAction(delegate { UseCard(card, currentIndex); });
+                }
+            }
+        }
+    }
+
     public void UseCard(Card card, int index) {
         OnNodeSelected(index);
         cards.Remove(card);
         Destroy(card.gameObject);
     }    
 
-    private void ShowPNJDialogue(Node newNode) {
+    private void ShowPNJQuestion(Node newNode) {
         txtTitle.transform.parent.gameObject.SetActive(true);
         txtTitle.text = newNode.title.Split("_")[0];
         txtBody.Begin(newNode.text);
         txtBody.SetFinishAction(delegate { CardManager.Instance.canPlayCard = true; });
+    } 
+
+    private void ShowPNJDialogue(Node newNode) {
+        canGetToNextDialogue = false;
+        txtTitle.transform.parent.gameObject.SetActive(true);
+        txtTitle.text = newNode.title.Split("_")[0];
+        txtBody.Begin(newNode.text);
+        txtBody.SetFinishAction(delegate { canGetToNextDialogue = true; });
+    }
+
+    private IEnumerator WaitUntilNextDialogue(UnityAction action) {
+        canGetToNextDialogue = false;
+        while (!canGetToNextDialogue) {
+            yield return null;
+        }
+        action();
     }
 
     private IEnumerator ClientWalkAnimation() {

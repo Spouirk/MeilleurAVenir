@@ -5,7 +5,6 @@ using UnityEngine;
 
 public class CardManager : MonoBehaviour
 {
-
     public static CardManager Instance;
 
     Dictionary<string, string> dialogueVariable = new Dictionary<string, string>();
