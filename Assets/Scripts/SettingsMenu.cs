@@ -9,7 +9,10 @@ public class SettingsMenu : MonoBehaviour
 {
     [SerializeField] private AudioMixer audioMixer;
     [SerializeField] TMPro.TMP_Dropdown resolutionDropDown;
+    [SerializeField] Toggle fullScreenToggle;
     Resolution[] resolutions;
+
+    private int currentResolution;
 
     void Start()
     {
@@ -20,7 +23,7 @@ public class SettingsMenu : MonoBehaviour
 
         List<string> resolutionOptions = new List<string>();
 
-        int currentResolution = -1;
+        currentResolution = -1;
         for(int i = 0; i < resolutions.Length; i++) {
             resolutionOptions.Add(resolutions[i].width + "x" + resolutions[i].height);
             if(resolutions[i].width == Screen.width && resolutions[i].height == Screen.height) {
@@ -32,6 +35,7 @@ public class SettingsMenu : MonoBehaviour
         resolutionDropDown.AddOptions(resolutionOptions);
         resolutionDropDown.value = currentResolution;
         resolutionDropDown.RefreshShownValue();
+        fullScreenToggle.isOn = Screen.fullScreen;
     }
 
     public void SetVolume(float volume)
@@ -41,7 +45,9 @@ public class SettingsMenu : MonoBehaviour
 
     public void SetFullScreen(bool isFullScreen)
     {
-        Screen.fullScreen = isFullScreen;
+        Resolution resolution = resolutions[currentResolution];
+        Screen.SetResolution(resolution.width, resolution.height, isFullScreen);
+        //Screen.fullScreen = isFullScreen;
     }
 
     public void SetResolution(int resolutionIndex)
