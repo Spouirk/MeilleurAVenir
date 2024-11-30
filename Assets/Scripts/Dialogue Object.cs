@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
+using Unity.VisualScripting.AssemblyQualifiedNameParser;
 using UnityEngine;
 
 public class DialogueObject {
@@ -58,6 +60,85 @@ public class DialogueObject {
         // TODO proper override
         public string Print() {
             return "";//string.Format( "Node {  Title: '%s',  Tag: '%s',  Text: '%s'}", title, tag, text );
+        }
+
+        private enum COMMAND_TYPE
+        {
+            SET,
+            IF,
+            ELSEIF,
+            ELSE,
+            DEFAULT
+        }
+
+        public string GetText()
+        {
+            Regex patternExtract = new Regex("\\(\\((?<commande>.*)\\)\\)(.*\\[(?<text>.*)\\]|)");
+            bool isConditionAlreadyValide = false;
+
+            string parsedText = "";
+            foreach(string line in text.Split("\n"))
+            {
+                Match match = patternExtract.Match(line);
+                if (match.Success){
+                    COMMAND_TYPE commandType = GetCommandType(match.Groups["commande"].Value);
+                    switch (commandType)
+                    {
+                        case COMMAND_TYPE.SET:
+                            Regex patternExtractSetVariable = new Regex("\\(\\(set: \\$(?<variableName>.*) to \"(?<value>.*)\"\\)\\)");
+                            Match variableMatch = patternExtractSetVariable.Match(match.Groups["commande"].Value);
+
+                            CardManager.Instance.SetVariable(variableMatch.Groups["variableName"].Value, variableMatch.Groups["value"].Value);
+                            break;
+                        case COMMAND_TYPE.IF:
+                            isConditionAlreadyValide = false ;
+
+                            if (testCondition(match.Groups["commande"].Value))
+                            {
+                                isConditionAlreadyValide = true ;
+                                parsedText += "\n" + match.Groups["text"].Value;
+                            }
+
+                            break;
+                        case COMMAND_TYPE.ELSEIF:
+                            if (isConditionAlreadyValide) break;
+
+                            if (testCondition(match.Groups["commande"].Value))
+                            {
+                                isConditionAlreadyValide = true;
+                                parsedText += "\n" + match.Groups["text"].Value;
+                            }
+                            break;
+                        case COMMAND_TYPE.ELSE:
+                            if (isConditionAlreadyValide) break;
+                            parsedText += "\n" + match.Groups["text"].Value;
+                            break;
+                        case COMMAND_TYPE.DEFAULT:
+                            break;
+                    }
+                }
+            }
+
+            return parsedText;
+        }
+
+        private bool testCondition(string condition)
+        {
+            Regex patternExtractIf = new Regex("\\(\\((else-if|if): \\$(?<variableName>.*) is \"(?<value>.*)\"\\)\\)");
+            Match conditionIfMatch = patternExtractIf.Match(condition);
+
+            string conditionVariableValue = CardManager.Instance.GetVariable(conditionIfMatch.Groups["variableName"].Value);
+
+            return conditionVariableValue == conditionIfMatch.Groups["variableName"].Value;
+        }
+
+        private COMMAND_TYPE GetCommandType(string command)
+        { 
+            if(command.StartsWith("set:")) return COMMAND_TYPE.SET;
+            if(command.StartsWith("if")) return COMMAND_TYPE.IF;
+            if(command.StartsWith("else-if")) return COMMAND_TYPE.ELSEIF;
+            if(command.StartsWith("else")) return COMMAND_TYPE.ELSE;
+            return COMMAND_TYPE.DEFAULT;
         }
 
     }
