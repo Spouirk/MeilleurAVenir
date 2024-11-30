@@ -13,13 +13,12 @@ public class MainMenu : MonoBehaviour
     {
         settingsPanel.SetActive(false);
         creditsPanel.SetActive(false);
-        Screen.fullScreen = true;
     }
 
     public void StartGame()
     {
-        //Changer nom de la scène à load
-        SceneManager.LoadScene("Test");
+        //Changer nom de la scène à load si besoin
+        SceneManager.LoadScene("Chloe");
     }
 
     public void Settings()

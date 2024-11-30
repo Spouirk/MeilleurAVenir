@@ -7,11 +7,12 @@ public class PauseMenu : MonoBehaviour
 {
     [SerializeField] private GameObject pausePanel;
 
-    private bool gameIsPaused = false;
+    private bool gameIsPaused;
 
     void Start()
     {
         pausePanel.SetActive(false);
+        gameIsPaused = false;
     }
 
     void Update()
@@ -27,19 +28,19 @@ public class PauseMenu : MonoBehaviour
     }
 
     private void PauseGame() {
-        pausePanel.SetActive(true);
         gameIsPaused = true;
+        pausePanel.SetActive(true);
     }
 
     public void ResumeGame() 
     {
-        pausePanel.SetActive(false);
         gameIsPaused = false;
+        pausePanel.SetActive(false);
     }
 
     public void MainMenu()
     {
-        SceneManager.LoadScene("Menu");
         gameIsPaused = false;
+        SceneManager.LoadScene("Menu");
     }
 }

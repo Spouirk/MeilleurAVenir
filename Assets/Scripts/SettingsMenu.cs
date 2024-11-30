@@ -9,17 +9,18 @@ public class SettingsMenu : MonoBehaviour
 {
     [SerializeField] private AudioMixer audioMixer;
     [SerializeField] TMPro.TMP_Dropdown resolutionDropDown;
-    [SerializeField] private Toggle toggle;
     Resolution[] resolutions;
 
     void Start()
     {
-        resolutions = Screen.resolutions.Select(resolution => new Resolution {width = resolution.width, height = resolution.height}).Distinct().ToArray();
+        resolutions = Screen.resolutions
+                            .Where(resolution => resolution.width % 16 == 0 && resolution.height % 9 == 0)
+                            .Select(resolution => new Resolution {width = resolution.width, height = resolution.height}).Distinct().ToArray();
         resolutionDropDown.ClearOptions();
 
         List<string> resolutionOptions = new List<string>();
 
-        int currentResolution = 0;
+        int currentResolution = -1;
         for(int i = 0; i < resolutions.Length; i++) {
             resolutionOptions.Add(resolutions[i].width + "x" + resolutions[i].height);
             if(resolutions[i].width == Screen.width && resolutions[i].height == Screen.height) {
@@ -27,6 +28,7 @@ public class SettingsMenu : MonoBehaviour
             }
         }
 
+        currentResolution = currentResolution == -1 ? resolutions.Length - 1 : currentResolution;
         resolutionDropDown.AddOptions(resolutionOptions);
         resolutionDropDown.value = currentResolution;
         resolutionDropDown.RefreshShownValue();

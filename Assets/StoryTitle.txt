@@ -1,0 +1,65 @@
+:: StoryTitle
+TestStory
+
+:: StoryData
+{
+ "ifid": "DCCC57B7-1831-4514-AB1B-B60DCC026324",
+ "format": "Entweedle",
+ "format-version": "1.1.1",
+ "startnode": "3",
+ "zoom": "1",
+ "start": "Salary Man_0",
+ "tag-colors": {
+  "START": "green",
+  "END": "red",
+  "PNJ": "blue",
+  "Voyante": "purple",
+  "VOYANTE": "purple"
+ }
+}
+
+:: UserScript [script]
+
+
+:: UserStylesheet [stylesheet]
+
+
+:: Death [VOYANTE] {"position":"850,225","size":"100,100"}
+Tu vas mouriiiir
+
+Reponse[[Salary Man_0.0]]
+
+:: Lovers [VOYANTE] {"position":"850,350","size":"100,100"}
+L'amour te trouvera !
+
+Reponse[[Salary Man_0.1]]
+
+:: Salary Man_0 [START PNJ] {"position":"675,425","size":"100,100"}
+Que va-t-il m'arriver demain ?
+
+The Death[[Death]]
+The Lovers[[Lovers]]
+The Fool[[Fool]]
+The Chariot[[Chariot]]
+
+:: Salary Man_0.0 [PNJ END] {"position":"1000,225","size":"100,100"}
+Euuh d'accord...
+
+:: Salary Man_0.1 [PNJ END] {"position":"1000,350","size":"100,100"}
+Ouuaaais :D
+
+:: Fool [VOYANTE] {"position":"850,475","size":"100,100"}
+You foooool
+
+Reponse[[Salary Man_0.2]]
+
+:: Chariot [VOYANTE] {"position":"850,600","size":"100,100"}
+Silver Chariot!
+
+Reponse[[Salary Man_0.3]]
+
+:: Salary Man_0.2 [PNJ END] {"position":"1000,475","size":"100,100"}
+Hein ?
+
+:: Salary Man_0.3 [PNJ END] {"position":"1000,600","size":"100,100"}
+yare yare daze...
