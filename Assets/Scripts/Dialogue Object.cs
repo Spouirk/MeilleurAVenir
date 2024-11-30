@@ -65,7 +65,7 @@ public class DialogueObject {
             string[] nodeData = twineText.Split(new string[] { "::" }, StringSplitOptions.None);
  
             bool passedHeader = false;
-            const int kIndexOfContentStart = 4;
+            // const int kIndexOfContentStart = 4;
             for ( int i = 0; i < nodeData.Length; i++ )
             {
  
