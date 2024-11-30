@@ -19,7 +19,7 @@ public class MainMenu : MonoBehaviour
     public void StartGame()
     {
         //Changer nom de la scène à load
-        SceneManager.LoadScene("Chloe");
+        SceneManager.LoadScene("Test");
     }
 
     public void Settings()
