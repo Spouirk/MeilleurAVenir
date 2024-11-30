@@ -14,13 +14,30 @@ public class DialogueViewer : MonoBehaviour
     [SerializeField] DialogueController controller;
     [SerializeField] TMPro.TextMeshProUGUI txtTitle;
     [SerializeField] SlowTyper txtBody;
-    [SerializeField] Card[] cards;
+    [SerializeField] List<Card> cards = new List<Card>();
     [SerializeField] TMPro.TextMeshProUGUI voyanteText;
+    [SerializeField] GameObject cardPrefab;
+    [SerializeField] GameObject fadePanel;
 
     [Header("Settings")]
     [SerializeField] float voyanteTextDelay = 2.0f;
     [SerializeField] float voyanteTextDuration = 3.0f;
     [SerializeField] float voyanteTextShakeIntensity = 2.0f;
+
+    [Header("Client")]
+    [SerializeField] float clientWalkTime = 3.0f;
+    [SerializeField] GameObject client;
+    [SerializeField] GameObject clientOrigin;
+    [SerializeField] GameObject clientDestination;
+    [SerializeField] GameObject clientOutPoint;
+
+    [Header("Skins")]
+    [SerializeField] Sprite SalaryMan;
+    [SerializeField] Sprite Religieux;
+
+    [Header("Cards skin")]
+    [SerializeField] Sprite cardLovers;
+    [SerializeField] Sprite cardChariot;
 
     // Start is called before the first frame update
     void Start()
@@ -31,27 +48,161 @@ public class DialogueViewer : MonoBehaviour
     }
 
     private void OnNodeEntered(Node newNode) {
+        if (newNode.isFade()) {
+            StartCoroutine(Fade());
+            StartCoroutine(ClientExitAnimation());
+        }
+        if (newNode.IsNewWeek()) {
+            ClearCards();
+            SpawnCards(newNode);
+        }
+        if (newNode.IsQuestion()) {
+            Debug.Log("Setting cards");
+            SetCards(newNode);
+        }
+        if (newNode.IsNewClient()) {
+            StartCoroutine(ClientWalkAnimation());
+            StartCoroutine(DelayedAction(clientWalkTime, delegate { ShowPNJDialogue(newNode); }));
+            ChangeClientSkin(newNode.title.Split("_")[0]);
+            return;
+        }
+        if (newNode.IsPNJNode()) {
+            ShowPNJDialogue(newNode);
+            StartCoroutine(DelayedAction(2.0f, delegate { controller.ChooseResponse(0); }));
+        }
         if (newNode.IsVoyanteNode()) {
             voyanteText.text = newNode.text;
             StartCoroutine(ShowVoyanteDialogue(voyanteTextDelay, voyanteTextDuration));
             StartCoroutine(ShakeDialogue(voyanteText, voyanteTextDelay + voyanteTextDuration));
             StartCoroutine(DelayedAction(voyanteTextDelay + voyanteTextDuration, delegate { controller.ChooseResponse(0); }));
-            return;
-        }
-
-        txtTitle.text = newNode.title.Split("_")[0];
-        txtBody.Begin(newNode.text);
-        txtBody.SetFinishAction(delegate { CardManager.instance.canPlayCard = true; });
-        for (int i = 0; i < newNode.responses.Count; i++) {
-            int currentChoiceIndex = i;
-
-            cards[i].SetName(newNode.responses[i].displayText);
-            cards[i].SetButtonAction(delegate { OnNodeSelected(currentChoiceIndex); });
         }
     }
 
     private void OnNodeSelected(int indexChosen) {
         controller.ChooseResponse(indexChosen);
+    }
+
+    private void ChangeClientSkin(string skinName) {
+        switch (skinName) {
+            case "Salary Man":
+                client.GetComponent<Image>().sprite = SalaryMan;
+                break;
+            case "Religieux":
+                client.GetComponent<Image>().sprite = Religieux;
+                break;
+            default:
+                break;
+        }
+    }
+
+    private void ClearCards() {
+        foreach (Card card in cards) {
+            Destroy(card.gameObject);
+        }
+        cards.Clear();
+    }
+
+    private IEnumerator Fade() {
+        float fadeDuration = 1.0f;
+        float blackScreenDuration = 1.0f;
+        txtTitle.transform.parent.gameObject.SetActive(false);
+
+
+        float t = 0f;
+        while (t < fadeDuration) {
+            t += Time.deltaTime;
+            fadePanel.GetComponent<Image>().color = Color.Lerp(Color.clear, Color.black, t / fadeDuration);
+            yield return null;
+        }
+        yield return new WaitForSeconds(blackScreenDuration);
+
+        t = 0f;
+        while (t < fadeDuration) {
+            t += Time.deltaTime;
+            fadePanel.GetComponent<Image>().color = Color.Lerp(Color.black, Color.clear, t / fadeDuration);
+            yield return null;
+        }
+
+        controller.ChooseResponse(0);
+    }
+
+    private void SpawnCards(Node newNode) {
+        for (int i = 0; i < newNode.responses.Count; i++) {
+            Card newCard = Instantiate(cardPrefab, CardManager.Instance.cardsHolder.transform).GetComponent<Card>();
+
+            newCard.gameObject.name = newNode.responses[i].displayText;
+            RectTransform cardRectTransform = newCard.GetComponent<RectTransform>();
+            RectTransform canvasRectTransform = CardManager.Instance.canvasRectTransform;
+            cardRectTransform.anchoredPosition = new Vector2(i * 100 - 200, -200);
+            newCard.SetName(newNode.responses[i].displayText);
+            newCard.SetButtonAction(delegate { OnNodeSelected(i); });
+
+            switch (newNode.responses[i].displayText) {
+                case "The Lovers":
+                    newCard.SetImage(cardLovers);
+                    break;
+                case "The Chariot":
+                    newCard.SetImage(cardChariot);
+                    break;
+                default:
+                    break;
+            }
+
+            cards.Add(newCard);
+        }
+    }
+
+    private void SetCards(Node newNode) {
+        for (int i = 0; i < newNode.responses.Count; i++) {
+            int currentIndex = i;
+            Card card = cards[currentIndex];
+
+            cards[currentIndex].SetName(newNode.responses[currentIndex].displayText);
+            cards[currentIndex].SetButtonAction(delegate {UseCard(card, currentIndex);});
+        }
+    }
+
+    public void UseCard(Card card, int index) {
+        OnNodeSelected(index);
+        cards.Remove(card);
+        Destroy(card.gameObject);
+    }    
+
+    private void ShowPNJDialogue(Node newNode) {
+        txtTitle.transform.parent.gameObject.SetActive(true);
+        txtTitle.text = newNode.title.Split("_")[0];
+        txtBody.Begin(newNode.text);
+        txtBody.SetFinishAction(delegate { CardManager.Instance.canPlayCard = true; });
+    }
+
+    private IEnumerator ClientWalkAnimation() {
+        client.transform.position = clientOrigin.transform.position;
+
+        float t = 0;
+        while (t < clientWalkTime) {
+            t += Time.deltaTime;
+            client.transform.position = Vector3.Lerp(clientOrigin.transform.position, clientDestination.transform.position, t / clientWalkTime);
+            yield return null;
+        }
+
+        client.transform.position = clientDestination.transform.position;
+
+        yield return null;
+    }
+
+    private IEnumerator ClientExitAnimation() {
+        client.transform.position = clientDestination.transform.position;
+
+        float t = 0;
+        while (t < clientWalkTime) {
+            t += Time.deltaTime;
+            client.transform.position = Vector3.Lerp(clientDestination.transform.position, clientOutPoint.transform.position, t / clientWalkTime);
+            yield return null;
+        }
+
+        client.transform.position = clientOutPoint.transform.position;
+
+        yield return null;
     }
 
     private IEnumerator ShowVoyanteDialogue(float delay, float duration) {

@@ -17,19 +17,21 @@ public class Card : MonoBehaviour
     [SerializeField] GameObject dragZoneObject;
     RectTransform dragZonePanel;
     Image dragZoneImage;
+
+    public TMPro.TextMeshProUGUI debugText;
     
     private float acceleration = 9.8f;
     private float currentVelocity;
 
     private void Awake() {
-        dragZoneObject = CardManager.instance.dragZoneObject;
+        dragZoneObject = CardManager.Instance.dragZoneObject;
         dragZonePanel = dragZoneObject.GetComponent<RectTransform>();
         dragZoneImage = dragZoneObject.GetComponent<Image>();
 
-        canvasRectTransform = CardManager.instance.canvasRectTransform;
+        canvasRectTransform = CardManager.Instance.canvasRectTransform;
         cardRectTransform = GetComponent<RectTransform>();
 
-        acceleration = CardManager.instance.acceleration;
+        acceleration = CardManager.Instance.acceleration;
     }
 
     private UnityAction cardUsedAction;
@@ -66,7 +68,7 @@ public class Card : MonoBehaviour
     }
 
     public void OnHeldDown(bool isHeldDown) {
-        if (!isHeldDown && !isDragging) return;
+        if (!CardManager.Instance.canPlayCard || (!isHeldDown && !isDragging)) return;
         if (!isHeldDown && isDragging) {
             if (isDragging && RectTransformUtility.RectangleContainsScreenPoint(dragZonePanel, Input.mousePosition, null)) {
                 cardUsedAction.Invoke();
@@ -74,6 +76,7 @@ public class Card : MonoBehaviour
             }
             dragZoneImage.color = new Color(0, 0, 0, 0);
             isDragging = false;
+            RepositionInBounds();
             return;
         }
         if (!isDragging) {
@@ -84,10 +87,56 @@ public class Card : MonoBehaviour
         transform.position = Input.mousePosition + grabOffset;
     }
 
+    public void SetImage(Sprite image)
+    {
+        GetComponent<Image>().sprite = image;
+    }
+
     private bool IsAboveBottomOfCanvas()
     {
         float cardBottomY = cardRectTransform.position.y - (cardRectTransform.rect.height * cardRectTransform.lossyScale.y / 2);
         float canvasBottomY = canvasRectTransform.position.y - (canvasRectTransform.rect.height * canvasRectTransform.lossyScale.y / 2);
         return cardBottomY > canvasBottomY;
+    }
+
+    private void RepositionInBounds()
+    {
+        float cardWidth = cardRectTransform.rect.width * cardRectTransform.lossyScale.x;
+        float cardHeight = cardRectTransform.rect.height * cardRectTransform.lossyScale.y;
+        float canvasWidth = canvasRectTransform.rect.width * canvasRectTransform.lossyScale.x;
+        float canvasHeight = canvasRectTransform.rect.height * canvasRectTransform.lossyScale.y;
+
+        float cardLeftX = cardRectTransform.position.x - (cardWidth / 2);
+        float cardRightX = cardRectTransform.position.x + (cardWidth / 2);
+        float cardTopY = cardRectTransform.position.y + (cardHeight / 2);
+        float cardBottomY = cardRectTransform.position.y - (cardHeight / 2);
+
+        float canvasLeftX = canvasRectTransform.position.x - (canvasWidth / 2);
+        float canvasRightX = canvasRectTransform.position.x + (canvasWidth / 2);
+        float canvasTopY = canvasRectTransform.position.y + (canvasHeight / 2);
+        float canvasBottomY = canvasRectTransform.position.y - (canvasHeight / 2);
+
+        float newX = cardRectTransform.position.x;
+        float newY = cardRectTransform.position.y;
+
+        if (cardLeftX < canvasLeftX)
+        {
+            newX += canvasLeftX - cardLeftX;
+        }
+        else if (cardRightX > canvasRightX)
+        {
+            newX -= cardRightX - canvasRightX;
+        }
+
+        if (cardTopY > canvasTopY)
+        {
+            newY -= cardTopY - canvasTopY;
+        }
+        else if (cardBottomY < canvasBottomY)
+        {
+            newY += canvasBottomY - cardBottomY;
+        }
+
+        cardRectTransform.position = new Vector3(newX, newY, cardRectTransform.position.z);
     }
 }

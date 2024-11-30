@@ -35,6 +35,26 @@ public class DialogueObject {
             return tags.Contains( "PNJ" );
         }
 
+        internal bool IsQuestion() {
+            return tags.Contains( "QUESTION" );
+        }
+
+        internal bool isDescription() {
+            return tags.Contains( "DESCRIPTION" );
+        }
+
+        internal bool isFade() {
+            return tags.Contains( "FADE" );
+        }
+
+        internal bool IsNewClient() {
+            return tags.Contains( "NEWCLIENT" );
+        }
+
+        internal bool IsNewWeek() {
+            return tags.Contains( "NEWWEEK" );
+        }
+
         // TODO proper override
         public string Print() {
             return "";//string.Format( "Node {  Title: '%s',  Tag: '%s',  Text: '%s'}", title, tag, text );

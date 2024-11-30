@@ -6,7 +6,7 @@ TestStory
  "ifid": "DCCC57B7-1831-4514-AB1B-B60DCC026324",
  "format": "Entweedle",
  "format-version": "1.1.1",
- "startnode": "3",
+ "startnode": "1",
  "zoom": "1",
  "start": "Salary Man_0",
  "tag-colors": {
@@ -14,7 +14,11 @@ TestStory
   "END": "red",
   "PNJ": "blue",
   "Voyante": "purple",
-  "VOYANTE": "purple"
+  "VOYANTE": "purple",
+  "NEWCLIENT": "yellow",
+  "NEWWEEK": "orange",
+  "QUESTION": "blue",
+  "FADE": "orange"
  }
 }
 
@@ -24,42 +28,78 @@ TestStory
 :: UserStylesheet [stylesheet]
 
 
-:: Death [VOYANTE] {"position":"850,225","size":"100,100"}
-Tu vas mouriiiir
-
-Reponse[[Salary Man_0.0]]
-
-:: Lovers [VOYANTE] {"position":"850,350","size":"100,100"}
-L'amour te trouvera !
-
-Reponse[[Salary Man_0.1]]
-
-:: Salary Man_0 [START PNJ] {"position":"675,425","size":"100,100"}
+:: Salary Man_0 [START PNJ NEWCLIENT NEWWEEK QUESTION] {"position":"475,425","size":"100,100"}
 Que va-t-il m'arriver demain ?
 
-The Death[[Death]]
-The Lovers[[Lovers]]
-The Fool[[Fool]]
-The Chariot[[Chariot]]
+The Death[[Death_0.0]]
+The Lovers[[Lovers_0.0]]
+The Fool[[Fool_0.0]]
+The Chariot[[Chariot_0.0]]
 
-:: Salary Man_0.0 [PNJ END] {"position":"1000,225","size":"100,100"}
-Euuh d'accord...
-
-:: Salary Man_0.1 [PNJ END] {"position":"1000,350","size":"100,100"}
+:: Salary Man_0.1 [PNJ] {"position":"775,400","size":"100,100"}
 Ouuaaais :D
 
-:: Fool [VOYANTE] {"position":"850,475","size":"100,100"}
-You foooool
+Fondue[[Fondue0.0]]
 
-Reponse[[Salary Man_0.2]]
-
-:: Chariot [VOYANTE] {"position":"850,600","size":"100,100"}
-Silver Chariot!
-
-Reponse[[Salary Man_0.3]]
-
-:: Salary Man_0.2 [PNJ END] {"position":"1000,475","size":"100,100"}
+:: Salary Man_0.2 [PNJ END] {"position":"775,525","size":"100,100"}
 Hein ?
 
-:: Salary Man_0.3 [PNJ END] {"position":"1000,600","size":"100,100"}
+:: Salary Man_0.3 [PNJ END] {"position":"775,650","size":"100,100"}
 yare yare daze...
+
+:: Death_0.0 [VOYANTE] {"position":"650,275","size":"100,100"}
+Tu vas mourir
+
+Response[[Salary Man_0.0]]
+
+:: Lovers_0.0 [VOYANTE] {"position":"650,400","size":"100,100"}
+Tu vas trouver l'amour
+
+Response[[Salary Man_0.1]] 
+
+:: Fool_0.0 [VOYANTE] {"position":"650,525","size":"100,100"}
+Tu vas perdre
+
+Response[[Salary Man_0.2]] 
+
+:: Chariot_0.0 [VOYANTE] {"position":"650,650","size":"100,100"}
+Tu vas avoir de la chance
+
+Response[[Salary Man_0.3]] 
+
+:: Salary Man_0.0 [PNJ END] {"position":"775,275","size":"100,100"}
+Ah ...
+
+:: Religieux_0.0 [PNJ NEWCLIENT QUESTION] {"position":"1150,400","size":"100,100"}
+Que va-t-il m'arriver demain ?
+
+The Death[[Death_1.0]]
+The Fool[[Fool_1.0]]
+The Chariot[[Chariot_1.0]]
+
+:: Death_1.0 [VOYANTE] {"position":"1300,250","size":"100,100"}
+Tu vas mourir
+
+Reponse[[Religieux_1.0]]
+
+:: Fool_1.0 [VOYANTE] {"position":"1300,500","size":"100,100"}
+Tu vas perdre
+
+Reponse[[Religieux_1.2]]
+
+:: Chariot_1.0 [VOYANTE] {"position":"1300,625","size":"100,100"}
+Tu vas avoir de la chance
+
+Reponse[[Religieux_1.3]]
+
+:: Religieux_1.0 [PNJ END] {"position":"1425,250","size":"100,100"}
+Ah ...
+
+:: Religieux_1.3 [PNJ END] {"position":"1425,625","size":"100,100"}
+yare yare daze...
+
+:: Religieux_1.2 [PNJ END] {"position":"1425,500","size":"100,100"}
+Hein ?
+
+:: Fondue0.0 [FADE] {"position":"950,400","size":"100,100"}
+Religieux[[Religieux_0.0]]
