@@ -32,6 +32,8 @@ Le meilleur reste à venir
 ((set: $S1 to ''))
 Comment trouver un sens à ma vie ?
 
+[Faites glisser une carte de votre choix]
+
 La Papesse[[S1HighPriestess]]
 Le Chariot[[S1Chariot]]
 L'Hermite[[S1Hermit]]
@@ -133,11 +135,13 @@ Comment osez-vous lancer de telles accusations ?! Je vous enverrai à la casse. 
 
 :: Start [START DESCRIPTION] {"position":"400,125","size":"100,100"}
 Vous vous réveillez d’un long sommeil, tandis que des mains inconnues s’activent à vous remettre en marche. Après un long reboot de votre système, vous percevez des bribes d’un futur incertain.
+
 [Appuyer Sur Espace ou Clique Gauche]
 [[Intro_0]] 
 
 :: Intro_0 [DESCRIPTION] {"position":"525,125","size":"100,100"}
 De la faible lumière aux rideaux occultants, tout dans cette pièce, vous fait comprendre que votre existence doit être un secret.
+
 [Appuyer Sur Espace ou Clique Gauche]
 [[Intro_1]] 
 
