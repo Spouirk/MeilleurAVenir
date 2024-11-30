@@ -22,6 +22,8 @@ public class Card : MonoBehaviour
     
     private float acceleration = 9.8f;
     private float currentVelocity;
+    private float defaultScale;
+    private bool isFalling;
 
     private void Awake() {
         dragZoneObject = CardManager.Instance.dragZoneObject;
@@ -32,6 +34,7 @@ public class Card : MonoBehaviour
         cardRectTransform = GetComponent<RectTransform>();
 
         acceleration = CardManager.Instance.acceleration;
+        defaultScale = cardRectTransform.localScale.x;
     }
 
     private UnityAction cardUsedAction;
@@ -52,6 +55,7 @@ public class Card : MonoBehaviour
 
     private void Update() {
         Fall();
+        isFalling = currentVelocity > 0f;
     }
 
     private void Fall() {
@@ -85,6 +89,26 @@ public class Card : MonoBehaviour
         }
         dragZoneImage.color = RectTransformUtility.RectangleContainsScreenPoint(dragZonePanel, Input.mousePosition, null) ? Color.green : Color.red;
         transform.position = Input.mousePosition + grabOffset;
+    }
+
+    public void OnMouseHover(bool isOver) {
+        if (!isDragging && isOver) {
+            ZoomOnCard();
+            RepositionInBounds();
+        } else {
+            cardRectTransform.localScale = Vector3.one * defaultScale;
+        }
+        // Debug.Log("Mouse over " + cardName.text + " " + isOver);
+        // if (isOver) Debug.Log("Mouse over " + cardName.text);
+    }
+
+    private void ZoomOnCard() {
+        cardRectTransform.localScale = Vector3.one * defaultScale * 1.5f;
+    }
+
+    public string GetName()
+    {
+        return cardName.text;
     }
 
     public void SetImage(Sprite image)

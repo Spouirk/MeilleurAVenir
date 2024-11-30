@@ -1,11 +1,11 @@
 using UnityEngine;
-using System.Collections;
 using UnityEngine.EventSystems;
 
-public class CardButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler {
+public class CardButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler, IPointerEnterHandler, IPointerExitHandler {
 
     private bool buttonPressed;
     private Card card;
+    private bool isHovering;
 
     private void Awake() {
         card = transform.parent.GetComponent<Card>();
@@ -21,5 +21,14 @@ public class CardButton : MonoBehaviour, IPointerDownHandler, IPointerUpHandler 
 
     private void Update() {
         card.OnHeldDown(buttonPressed);
+        card.OnMouseHover(isHovering);
+    }
+
+    public void OnPointerEnter(PointerEventData eventData) {
+        isHovering = true;
+    }
+
+    public void OnPointerExit(PointerEventData eventData) {
+        isHovering = false;
     }
 }

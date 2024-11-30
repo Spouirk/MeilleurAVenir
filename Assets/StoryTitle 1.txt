@@ -1,0 +1,249 @@
+:: StoryTitle
+Le meilleur reste à venir
+
+:: StoryData
+{
+ "ifid": "66DECB09-30F9-4695-BF93-DDD630A721F9",
+ "format": "Entweedle",
+ "format-version": "1.1.1",
+ "startnode": "33",
+ "zoom": "1",
+ "start": "Start",
+ "tag-colors": {
+  "START": "green",
+  "PNJ": "blue",
+  "END": "red",
+  "VOYANTE": "purple",
+  "DESCRIPTION": "yellow",
+  "QUESTION": "blue",
+  "NEWCLIENT": "blue",
+  "NEWWEEK": "yellow",
+  "FADE": "orange"
+ }
+}
+
+:: UserScript [script]
+
+
+:: UserStylesheet [stylesheet]
+
+
+:: Ado_0 [PNJ NEWCLIENT] {"position":"850,1250","size":"100,100"}
+Cassandre. Scorpion. A positif.
+J’ai appris de source sûre que ta sorcellerie ne serait que poudre aux yeux.
+
+(if: $S1 is "death")[Pourtant le·a dernier·e qui a osé te consulter, se trouve aujourd’hui six pieds sous terre.]
+
+(else-if: $S1 is "highpriestess" or "hermit")
+[Pourtant tes tours, on fait renaître la foi de brebis jusqu’alors égarée.]
+
+(else-if: $S1 is "chariot")
+[Pourtant le·a dernier·e à t'avoir consulté, a osé lancer un mouvement social coriace.]
+
+[[Ado_1]]
+
+:: Ado_1 [PNJ QUESTION] {"position":"850,1375","size":"100,100"}
+<!--(set: $A1 to "")-->
+
+Mais allez, dis moi si tu l’oses, quel est le destin de la plus grande discipline de la nouvelle lune. 
+
+La Papesse[[A1HighPriestess]]
+Le Chariot[[A1Chariot]]
+L'Hermite[[A1Hermit]]
+La Mort[[A1Death]]
+
+:: A1Chariot [VOYANTE] {"position":"775,1625","size":"100,100"}
+(set: $A1 to "chariot") 
+Le Chariot. La détermination sera la clé du triomphe. Garde le contrôle, le voyage est long.
+[[Ado_2]]
+
+:: A1Death [VOYANTE] {"position":"1075,1625","size":"100,100"}
+<!--(set: $A1 to "death") -->
+Vous avez choisi la Mort. La fin d’un cycle s’annonce, n’ai pas peur du renouveau et achève ta transformation. 
+[[Ado_2]]
+
+:: A1Hermit [VOYANTE] {"position":"925,1625","size":"100,100"}
+<!--(set: $A1 to "hermit") -->
+L'Hermite. Laisse-toi guider par ta voix intérieure, car c’est dans la solitude que tu trouveras la vérité.
+
+[[Ado_2]]
+
+:: A1HighPriestess [VOYANTE] {"position":"625,1625","size":"100,100"}
+<!--(set: $A1 to "highpriestess") -->
+La Papesse. Patience, la sagesse intérieure est proche, suis ton intuition et tous les mystères se révèleront à toi.
+[[Ado_2]]
+
+:: Ado_2 [PNJ] {"position":"850,1750","size":"100,100"}
+C’est en parlant de magie païenne que ton nom s’est fait connaître, pourtant aujourd’hui ce n’est qu’un vulgaire jeu pour enfant que tu m’as offert. 
+
+[[TransitionP1]]
+
+:: EndWeek1 [END] {"position":"850,2650","size":"100,100"}
+
+
+:: Introduction.1 [DESCRIPTION] {"position":"525,150","size":"100,100"}
+Tout dans cette pièce, de la faible lumière aux rideaux occultants, vous fait comprendre que votre existence doit rester secrète. 
+
+[Clique gauche / Espace pour continuer]
+[[Introduction.2]]
+
+:: Introduction.2 [DESCRIPTION] {"position":"650,150","size":"100,100"}
+Des bruits de pas, quelques murmures dissimulés vous font pressentir que vous serez bientôt l’attraction interdite des curieux les plus aventureux. 
+
+[Clique gauche / Espace pour continuer]
+[[Introduction.3]]
+
+:: Introduction.3 [DESCRIPTION] {"position":"775,150","size":"100,100"}
+Pour vérifier l’intégrité de votre système, il est temps de lire votre destin.
+
+[[Introduction.4]]
+
+:: Introduction.4 [DESCRIPTION] {"position":"925,150","size":"100,100"}
+Sur l’ensemble des 22 cartes de tarot de Marseille que vous possédiez, seules 6 ont survécu au subisse du temps. 
+
+[[Introduction.5]]
+
+:: Introduction.5 [DESCRIPTION] {"position":"1050,150","size":"100,100"}
+Dans votre tirage, la mort se révèle à vous. Vous discernez des bribes de futur : votre temps est compté, si vous ne changez pas votre destin, dans trois semaines, votre système sera définitivement mis hors service. 
+
+[[Week1.1]]
+
+:: P1.1 [DESCRIPTION] {"position":"850,2000","size":"100,100"}
+De loin, des pas lourds et confiants grondent, s’approchant avec assurance. Une carrure imposante se présente devant vous. 
+
+[[P1.2]]
+
+:: P1.2 [PNJ NEWCLIENT QUESTION] {"position":"850,2125","size":"100,100"}
+<!--(set: $P1 to "")-->
+Melvin, Scorpion, O+
+
+<!--(if: $S1 is "death" or "chariot")
+[Vos actions ont eu le don de brusquer mon plus généreux donateur. Je n’ai plus de nouvelles de lui, depuis qu’il essaye de mater cette émeute.]
+
+(else:)
+[Vos actions ont été bénéfiques aux fidèles de la nouvelle lune,  il m’est de plus en plus difficile d’ignorer leurs demandes. Depuis que vous avez éveillé une foi débordante dans leur prophète... Alex…]-->
+
+Si votre temps se perd à aider les petites gens, il me paraît bien normal que moi aussi je bénéficie de vos talents.
+
+[[La Papesse Inversée->P1HighPriestess!]]
+[[Le Chariot Inversé->P1Chariot!]]
+[[L'Hermite Inversé->P1Hermit!]]
+[[La Mort Inversée->P1Death!]]
+
+:: P1Chariot! [VOYANTE] {"position":"925,2300","size":"100,100"}
+<!--(set: $P1 to "chariot") -->
+Chariot Inversé. Le manque de direction vous mènera à l’échec, mais c’est la perte de contrôle qui vous sera fatale. 
+[[P1HumiliationReaction]]
+
+:: P1Death! [VOYANTE] {"position":"775,2300","size":"100,100"}
+<!--(set: $P1 to "death") -->
+Mort Inversée. Rester statique vous conforte, cessez ou l’échec sera à votre porte. 
+[[P1StagnationReaction]]
+
+:: P1Hermit! [VOYANTE] {"position":"625,2300","size":"100,100"}
+<!--(set: $P1 to "hermit") -->
+Hermite Inversée. C’est en refusant de regarder en vous que votre vie stagnera, isoler vous trop et l’on vous oubliera. 
+[[P1StagnationReaction]]
+
+:: P1HighPriestess! [VOYANTE] {"position":"1075,2300","size":"100,100"}
+<!--(set: $P1 to "highpriestess") -->
+Papesse Inversée. Votre plus grand secret sera révélé brisant votre superficialité. 
+
+[[P1HumiliationReaction]]
+
+:: P1HumiliationReaction {"position":"1000,2475","size":"100,100"}
+Comment osez-vous lancer de telles accusations ?! Je vous enverrai à la casse. Vous ne trouverez pas d'homme plus digne que moi et ce n’est pas de vous que ma réputation pâtira.
+
+[[EndWeek1]]
+
+:: P1StagnationReaction {"position":"700,2475","size":"100,100"}
+Vos cartes ne peuvent pas voir tout le potentiel qui sommeille en moi. Ma chance ne m’a jamais quitté et ce n’est pas vos néfastes prédictions qui changeront ma vision. 
+
+[[EndWeek1]]
+
+:: Salarié_4 [PNJ QUESTION NEWWEEK] {"position":"850,750","size":"100,100"}
+Comment donner un sens à ma vie ?
+
+La Papesse[[S1HighPriestess]]
+Le Chariot[[S1Chariot]]
+L'Hermite[[S1Hermit]]
+La Mort[[S1Death]]
+
+:: Salarié_0 [PNJ NEWCLIENT] {"position":"850,275","size":"100,100"}
+Hmm… Comment fonctionne cette machine ?!
+
+[Clique gauche / Espace pour continuer]
+[[Salarié_1]]
+
+:: Salarié_1 [PNJ] {"position":"850,400","size":"100,100"}
+“Décliner son identité… et partager son chagrin.” 
+
+[Clique gauche / Espace pour continuer]
+[[Salarié_2]]
+
+:: Salarié_2 [PNJ] {"position":"850,500","size":"100,100"}
+Alex. Capricorn. Groupe sanguin A+.
+
+[[Salarié_3]]
+
+:: Salarié_3 [PNJ] {"position":"850,625","size":"100,100"}
+Je… Je… J’en peux plus… Cette vie me fatigue… J’ai perdu la foi, j’ai perdu la passion, même le système ne peut plus rien pour moi. Mes voisins me détestent, mon patron me méprise. 
+
+[[Salarié_4]]
+
+:: S1Chariot [VOYANTE] {"position":"775,900","size":"100,100"}
+<!--(set: $S1 to "chariot") -->
+Vous avez choisi le Chariot. Prenez le contrôle de votre destin, le triomphe est à la clef. 
+[[Salarié_5]]
+
+:: S1Death [VOYANTE] {"position":"625,900","size":"100,100"}
+<!--(set: $S1 to "death") -->
+Vous avez choisi la Mort. N’ayez plus peur de lâcher-prise, votre destin sera source de renouveau.
+[[Salarié_5]]
+
+:: S1Hermit [VOYANTE] {"position":"1075,900","size":"100,100"}
+<!--(set: $S1 to "hermit") -->
+Vous avez choisi l'Hermite. Cherchez en vous la sagesse qui vous guidera. 
+[[Salarié_6]]
+
+:: S1HighPriestess [VOYANTE] {"position":"925,900","size":"100,100"}
+<!--(set: $S1 to "highpriestess") -->
+Vous avez choisi la Papesse. C’est dans votre sagesse intérieure que votre spiritualité se révélera. 
+[[Salarié_6]]
+
+:: Salarié_6 [PNJ] {"position":"1000,1050","size":"100,100"}
+Je… Je ne suis pas certain.e de comprendre ce que vous voulez dire… Je… Je vais y réfléchir…
+[[Transition_1]]
+
+:: Salarié_5 [PNJ] {"position":"700,1050","size":"100,100"}
+Vous avez raison, je vais me reprendre en main. Je sais ce qu’il me reste à faire !
+[[Transition_1]]
+
+:: Start [START DESCRIPTION] {"position":"400,150","size":"100,100"}
+Vous vous réveillez d’un long sommeil, tandis que des mains inconnues s’activent à vous remettre en marche. Après un long reboot de votre système, vous percevez des bribes d’un futur incertain. 
+
+[Clique gauche / Espace pour continuer]
+
+[[Introduction.1]]
+
+:: Transition_1 [FADE] {"position":"850,1125","size":"100,100"}
+*Le.a salarié.e s'en va.*
+*Transition au noir*
+*Des pas furtifs et agiles se glissent jusqu’à vous.*
+[[Ado_0]]
+
+:: TransitionP1 [FADE] {"position":"850,1875","size":"100,100"}
+*L'adolescente s'en va...*
+*Fondu au noir*
+
+[[P1.1]]
+
+:: Week1.1 [DESCRIPTION] {"position":"1175,150","size":"100,100"}
+En pleine nuit, des pas feutrés résonnent dans le bâtiment vide, brisant votre prison de solitude. Une tête passe brièvement dans l'entrebâillement de la porte avant de s’enfuir furtivement. 
+
+[[Week1.2]]
+
+:: Week1.2 [DESCRIPTION] {"position":"1300,150","size":"100,100"}
+Quelques minutes plus tard, une ombre imposante s’avance d’un pas incertain et se place face à vous. 
+
+[[Salarié_0]]
