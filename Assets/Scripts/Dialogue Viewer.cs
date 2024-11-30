@@ -52,66 +52,83 @@ public class DialogueViewer : MonoBehaviour
         controller.InitializeDialogue();
     }
 
-    private void OnNodeEntered(Node newNode) {
-        if (newNode.isDescription()) {
+    private void OnNodeEntered(Node newNode)
+    {
+        if (newNode.isDescription())
+        {
             ShowDescription(newNode);
             return;
         }
         descriptionBody.transform.parent.gameObject.SetActive(false);
-        if (newNode.isFade()) {
+        if (newNode.isFade())
+        {
             StartCoroutine(Fade());
-            StartCoroutine(ClientExitAnimation());
+            if (client.transform.position == clientDestination.transform.position) StartCoroutine(ClientExitAnimation());
         }
-        if (newNode.IsNewWeek()) {
+        if (newNode.IsNewWeek())
+        {
             ClearCards();
             SpawnCards(newNode);
             InitializeCards(newNode);
         }
-        if (newNode.IsNewClient()) {
+        if (newNode.IsNewClient())
+        {
             StartCoroutine(ClientWalkAnimation());
             ChangeClientSkin(newNode.title.Split("_")[0]);
-            if (newNode.IsQuestion()) {
+            if (newNode.IsQuestion())
+            {
                 if (!newNode.IsNewWeek()) SetCards(newNode);
                 StartCoroutine(DelayedAction(clientWalkTime, delegate { ShowPNJQuestion(newNode); }));
-            } else {
+            }
+            else
+            {
                 StartCoroutine(DelayedAction(clientWalkTime, delegate { ShowPNJDialogue(newNode); }));
                 StartCoroutine(WaitUntilNextDialogue(delegate { controller.ChooseResponse(0); }));
             }
             return;
         }
-        if (newNode.IsQuestion()) {
+        if (newNode.IsQuestion())
+        {
             if (!newNode.IsNewWeek()) SetCards(newNode);
             ShowPNJQuestion(newNode);
             return;
         }
-        if (newNode.IsPNJNode()) {
+        if (newNode.IsPNJNode())
+        {
             ShowPNJDialogue(newNode);
             StartCoroutine(WaitUntilNextDialogue(delegate { controller.ChooseResponse(0); }));
         }
-        if (newNode.IsVoyanteNode()) {
-            voyanteText.text = newNode.text;
+        if (newNode.IsVoyanteNode())
+        {
+            voyanteText.text = newNode.GetText();
             StartCoroutine(ShowVoyanteDialogue(voyanteTextDelay, voyanteTextDuration));
             StartCoroutine(ShakeDialogue(voyanteText, voyanteTextDelay + voyanteTextDuration));
             StartCoroutine(DelayedAction(voyanteTextDelay + voyanteTextDuration, delegate { controller.ChooseResponse(0); }));
         }
     }
 
-    private void OnNodeSelected(int indexChosen) {
+    private void OnNodeSelected(int indexChosen)
+    {
         controller.ChooseResponse(indexChosen);
     }
 
-    private void ChangeClientSkin(string skinName) {
-        switch (skinName) {
-            case "Salary Man":
+    private void ChangeClientSkin(string skinName)
+    {
+        switch (skinName)
+        {
+            case "Alex":
                 client.GetComponent<Image>().sprite = SalaryMan;
                 break;
             case "Religieux":
                 client.GetComponent<Image>().sprite = Religieux;
                 break;
-            case "Ado":
+            case "Cassandre":
                 client.GetComponent<Image>().sprite = Ado;
                 break;
             case "Vache":
+                client.GetComponent<Image>().sprite = Vache;
+                break;
+            case "Melvin":
                 client.GetComponent<Image>().sprite = Vache;
                 break;
             default:
@@ -119,21 +136,25 @@ public class DialogueViewer : MonoBehaviour
         }
     }
 
-    private void ClearCards() {
-        foreach (Card card in cards) {
+    private void ClearCards()
+    {
+        foreach (Card card in cards)
+        {
             Destroy(card.gameObject);
         }
         cards.Clear();
     }
 
-    private IEnumerator Fade() {
+    private IEnumerator Fade()
+    {
         float fadeDuration = 1.0f;
         float blackScreenDuration = 1.0f;
         txtTitle.transform.parent.gameObject.SetActive(false);
 
 
         float t = 0f;
-        while (t < fadeDuration) {
+        while (t < fadeDuration)
+        {
             t += Time.deltaTime;
             fadePanel.GetComponent<Image>().color = Color.Lerp(Color.clear, Color.black, t / fadeDuration);
             yield return null;
@@ -141,7 +162,8 @@ public class DialogueViewer : MonoBehaviour
         yield return new WaitForSeconds(blackScreenDuration);
 
         t = 0f;
-        while (t < fadeDuration) {
+        while (t < fadeDuration)
+        {
             t += Time.deltaTime;
             fadePanel.GetComponent<Image>().color = Color.Lerp(Color.black, Color.clear, t / fadeDuration);
             yield return null;
@@ -150,8 +172,10 @@ public class DialogueViewer : MonoBehaviour
         controller.ChooseResponse(0);
     }
 
-    private void SpawnCards(Node newNode) {
-        for (int i = 0; i < newNode.responses.Count; i++) {
+    private void SpawnCards(Node newNode)
+    {
+        for (int i = 0; i < newNode.responses.Count; i++)
+        {
             Card newCard = Instantiate(cardPrefab, CardManager.Instance.cardsHolder.transform).GetComponent<Card>();
 
             newCard.gameObject.name = newNode.responses[i].displayText;
@@ -161,7 +185,8 @@ public class DialogueViewer : MonoBehaviour
             newCard.SetName(newNode.responses[i].displayText);
             newCard.SetButtonAction(delegate { OnNodeSelected(i); });
 
-            switch (newNode.responses[i].displayText) {
+            switch (newNode.responses[i].displayText)
+            {
                 case "The Lovers":
                     newCard.SetImage(cardLovers);
                     break;
@@ -176,75 +201,91 @@ public class DialogueViewer : MonoBehaviour
         }
     }
 
-    private void InitializeCards(Node newNode) {
-        for (int i = 0; i < newNode.responses.Count; i++) {
+    private void InitializeCards(Node newNode)
+    {
+        for (int i = 0; i < newNode.responses.Count; i++)
+        {
             int currentIndex = i;
             Card card = cards[currentIndex];
 
             cards[currentIndex].SetName(newNode.responses[currentIndex].displayText);
-            cards[currentIndex].SetButtonAction(delegate {UseCard(card, currentIndex);});
+            cards[currentIndex].SetButtonAction(delegate { UseCard(card, currentIndex); });
         }
     }
 
-    private void SetCards(Node newNode) {
-        for (int i = 0; i < newNode.responses.Count; i++) {
+    private void SetCards(Node newNode)
+    {
+        for (int i = 0; i < newNode.responses.Count; i++)
+        {
             int currentIndex = i;
 
-            foreach (Card card in cards) {
-                if (card.GetName() == newNode.responses[i].displayText) {
+            foreach (Card card in cards)
+            {
+                if (card.GetName() == newNode.responses[i].displayText)
+                {
                     card.SetButtonAction(delegate { UseCard(card, currentIndex); });
                 }
             }
         }
     }
 
-    public void UseCard(Card card, int index) {
+    public void UseCard(Card card, int index)
+    {
         OnNodeSelected(index);
         cards.Remove(card);
         Destroy(card.gameObject);
-    }    
+    }
 
-    private void ShowPNJQuestion(Node newNode) {
+    private void ShowPNJQuestion(Node newNode)
+    {
         txtTitle.transform.parent.gameObject.SetActive(true);
         txtTitle.text = newNode.title.Split("_")[0];
-        txtBody.Begin(newNode.text);
+        txtBody.Begin(newNode.GetText());
         txtBody.SetFinishAction(delegate { CardManager.Instance.canPlayCard = true; });
-    } 
+    }
 
-    private void ShowPNJDialogue(Node newNode) {
+    private void ShowPNJDialogue(Node newNode)
+    {
         canGetToNextDialogue = false;
         txtTitle.transform.parent.gameObject.SetActive(true);
         txtTitle.text = newNode.title.Split("_")[0];
-        txtBody.Begin(newNode.text);
+        txtBody.Begin(newNode.GetText());
         txtBody.SetFinishAction(delegate { StartCoroutine(WaitForInputSkip()); });
     }
 
-    private void ShowDescription(Node newNode) {
+    private void ShowDescription(Node newNode)
+    {
         descriptionBody.transform.parent.gameObject.SetActive(true);
-        descriptionBody.Begin(newNode.text);
-        descriptionBody.SetFinishAction(delegate { StartCoroutine(WaitForInputSkip());});
+        descriptionBody.Begin(newNode.GetText());
+        descriptionBody.SetFinishAction(delegate { StartCoroutine(WaitForInputSkip()); });
     }
 
-    private IEnumerator WaitUntilNextDialogue(UnityAction action) {
+    private IEnumerator WaitUntilNextDialogue(UnityAction action)
+    {
         canGetToNextDialogue = false;
-        while (!canGetToNextDialogue) {
+        while (!canGetToNextDialogue)
+        {
             yield return null;
         }
         action();
     }
 
-    private IEnumerator WaitForInputSkip() {
-        while (!Input.GetKeyDown(KeyCode.Space) && !Input.GetMouseButtonDown(0)) {
+    private IEnumerator WaitForInputSkip()
+    {
+        while (!Input.GetKeyDown(KeyCode.Space) && !Input.GetMouseButtonDown(0))
+        {
             yield return null;
         }
         controller.ChooseResponse(0);
     }
 
-    private IEnumerator ClientWalkAnimation() {
+    private IEnumerator ClientWalkAnimation()
+    {
         client.transform.position = clientOrigin.transform.position;
 
         float t = 0;
-        while (t < clientWalkTime) {
+        while (t < clientWalkTime)
+        {
             t += Time.deltaTime;
             client.transform.position = Vector3.Lerp(clientOrigin.transform.position, clientDestination.transform.position, t / clientWalkTime);
             yield return null;
@@ -255,11 +296,13 @@ public class DialogueViewer : MonoBehaviour
         yield return null;
     }
 
-    private IEnumerator ClientExitAnimation() {
+    private IEnumerator ClientExitAnimation()
+    {
         client.transform.position = clientDestination.transform.position;
 
         float t = 0;
-        while (t < clientWalkTime) {
+        while (t < clientWalkTime)
+        {
             t += Time.deltaTime;
             client.transform.position = Vector3.Lerp(clientDestination.transform.position, clientOutPoint.transform.position, t / clientWalkTime);
             yield return null;
@@ -270,7 +313,8 @@ public class DialogueViewer : MonoBehaviour
         yield return null;
     }
 
-    private IEnumerator ShowVoyanteDialogue(float delay, float duration) {
+    private IEnumerator ShowVoyanteDialogue(float delay, float duration)
+    {
         voyanteText.gameObject.SetActive(true);
         Color color = voyanteText.color;
         Color fullColor = new Color(color.r, color.g, color.b, 1.0f);
@@ -281,19 +325,22 @@ public class DialogueViewer : MonoBehaviour
 
         yield return new WaitForSeconds(delay);
 
-        while (t < duration) {
+        while (t < duration)
+        {
             t += Time.deltaTime;
             voyanteText.color = Color.Lerp(fullColor, clearColor, t / duration);
             yield return null;
         }
     }
 
-    private IEnumerator ShakeDialogue(TMPro.TextMeshProUGUI text, float duration) {
+    private IEnumerator ShakeDialogue(TMPro.TextMeshProUGUI text, float duration)
+    {
         Vector3 originalPosition = text.transform.position;
         float shakeAmount = voyanteTextShakeIntensity;
         float t = 0;
 
-        while (t < duration) {
+        while (t < duration)
+        {
             t += Time.deltaTime;
             text.transform.position = originalPosition + UnityEngine.Random.insideUnitSphere * shakeAmount;
             yield return null;
@@ -302,7 +349,8 @@ public class DialogueViewer : MonoBehaviour
         text.transform.position = originalPosition;
     }
 
-    private IEnumerator DelayedAction(float delay, Action action) {
+    private IEnumerator DelayedAction(float delay, Action action)
+    {
         yield return new WaitForSeconds(delay);
         action();
     }

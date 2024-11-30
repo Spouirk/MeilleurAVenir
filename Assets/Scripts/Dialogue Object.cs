@@ -73,10 +73,11 @@ public class DialogueObject {
 
         public string GetText()
         {
-            Regex patternExtract = new Regex("\\(\\((?<commande>.*)\\)\\)(.*\\[(?<text>.*)\\]|)");
+            Regex patternExtract = new Regex(@"\(\((?<commande>.*)\)\)(.*\[(?<text>.*)\]|)");
             bool isConditionAlreadyValide = false;
 
             string parsedText = "";
+
             foreach(string line in text.Split("\n"))
             {
                 Match match = patternExtract.Match(line);
@@ -85,7 +86,7 @@ public class DialogueObject {
                     switch (commandType)
                     {
                         case COMMAND_TYPE.SET:
-                            Regex patternExtractSetVariable = new Regex("\\(\\(set: \\$(?<variableName>.*) to \"(?<value>.*)\"\\)\\)");
+                            Regex patternExtractSetVariable = new Regex(@"set: \$(?<variableName>.*) to \'(?<value>.*)'");
                             Match variableMatch = patternExtractSetVariable.Match(match.Groups["commande"].Value);
 
                             CardManager.Instance.SetVariable(variableMatch.Groups["variableName"].Value, variableMatch.Groups["value"].Value);
@@ -96,7 +97,8 @@ public class DialogueObject {
                             if (testCondition(match.Groups["commande"].Value))
                             {
                                 isConditionAlreadyValide = true ;
-                                parsedText += "\n" + match.Groups["text"].Value;
+                                if (parsedText.Length != 0) parsedText += "\n";
+                                parsedText +=  match.Groups["text"].Value;
                             }
 
                             break;
@@ -106,17 +108,20 @@ public class DialogueObject {
                             if (testCondition(match.Groups["commande"].Value))
                             {
                                 isConditionAlreadyValide = true;
-                                parsedText += "\n" + match.Groups["text"].Value;
+                                if (parsedText.Length != 0) parsedText += "\n";
+                                parsedText += match.Groups["text"].Value;
                             }
                             break;
                         case COMMAND_TYPE.ELSE:
                             if (isConditionAlreadyValide) break;
-                            parsedText += "\n" + match.Groups["text"].Value;
+                            if (parsedText.Length != 0) parsedText += "\n";
+                            parsedText += match.Groups["text"].Value;
                             break;
                         case COMMAND_TYPE.DEFAULT:
                             break;
                     }
                 }
+                else parsedText += parsedText.Length == 0 ? line : ("\n" + line);
             }
 
             return parsedText;
@@ -124,12 +129,12 @@ public class DialogueObject {
 
         private bool testCondition(string condition)
         {
-            Regex patternExtractIf = new Regex("\\(\\((else-if|if): \\$(?<variableName>.*) is \"(?<value>.*)\"\\)\\)");
+            Regex patternExtractIf = new Regex(@"(else-if|if): \$(?<variableName>.*) is \'(?<value>.*)\'");
             Match conditionIfMatch = patternExtractIf.Match(condition);
 
             string conditionVariableValue = CardManager.Instance.GetVariable(conditionIfMatch.Groups["variableName"].Value);
 
-            return conditionVariableValue == conditionIfMatch.Groups["variableName"].Value;
+            return conditionVariableValue == conditionIfMatch.Groups["value"].Value;
         }
 
         private COMMAND_TYPE GetCommandType(string command)
