@@ -14,7 +14,7 @@ public class DuplicateCard : MonoBehaviour
     private Canvas targetCanvas;
 
     [SerializeField]
-    private float delayBetweenSpawns = 0.2f;
+    private float delayBetweenSpawns = 0.25f;
 
     [SerializeField]
     private bool hasSpawnedCard = false;
@@ -23,39 +23,12 @@ public class DuplicateCard : MonoBehaviour
     private List<Card> cards;
     private Vector3 startScale;
     private Vector3 endScale;
+    private float dealTime;
 
     [SerializeField] GameObject spawnPoint;
 
 
-    void Update()
-    {
-        // if (Input.GetMouseButtonDown(0))
-        // {
-        //     PointerEventData pointerData = new PointerEventData(EventSystem.current);
-        //     pointerData.position = Input.mousePosition;
-
-        //     List<RaycastResult> results = new List<RaycastResult>();
-        //     EventSystem.current.RaycastAll(pointerData, results);
-
-        //     bool clickedOnThisCard = false;
-        //     foreach (RaycastResult result in results)
-        //     {
-        //         if (result.gameObject == gameObject)
-        //         {
-        //             clickedOnThisCard = true;
-        //             break;
-        //         }
-        //     }
-
-        //     if (clickedOnThisCard && !hasSpawnedCard)
-        //     {
-        //         Debug.Log("Clic sur la carte principale");
-        //         StartCoroutine(SpawnCardsRoutine());
-        //     }
-        // }
-    }
-
-    public void StartSpawnCards(Vector2[] positions, List<Card> cards, Vector3 startScale, Vector3 endScale)
+    public void StartSpawnCards(Vector2[] positions, List<Card> cards, Vector3 startScale, Vector3 endScale, float dealTime)
     {
         if (!hasSpawnedCard)
         {
@@ -63,6 +36,7 @@ public class DuplicateCard : MonoBehaviour
             this.cards = cards;
             this.startScale = startScale;
             this.endScale = endScale;
+            this.dealTime = dealTime;
             StartCoroutine(SpawnCardsRoutine());
         }
     }
@@ -81,10 +55,10 @@ public class DuplicateCard : MonoBehaviour
                 RectTransform duplicateRect = duplicateCard.GetComponent<RectTransform>();
                 duplicateRect.anchoredPosition = startPosition;
 
-                // Animer la carte
+                AudioManager.Instance.PlaySound("cardDeal");
+
                 StartCoroutine(AnimateCardDealing(duplicateCard, startPosition, endPosition));
 
-                // Attendre que l'animation de distribution soit terminée avant de jouer l'animation d'apparition
                 yield return StartCoroutine(AnimateCardDealing(duplicateCard, startPosition, endPosition));
 
                 i++;
@@ -96,7 +70,7 @@ public class DuplicateCard : MonoBehaviour
 
     private IEnumerator AnimateCardDealing(Card card, Vector2 startPos, Vector2 endPos)
     {
-        float duration = 0.2f;
+        float duration = 0.25f;
         float elapsedTime = 0;
 
         RectTransform rectTransform = card.GetComponent<RectTransform>();

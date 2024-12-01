@@ -21,11 +21,13 @@ public class DialogueViewer : MonoBehaviour
     [SerializeField] SlowTyper descriptionBody;
     [SerializeField] PauseMenu pauseMenu;
     [SerializeField] DuplicateCard cardSpawner;
+    [SerializeField] AudioSource cardUsedSound;
 
     [Header("Settings")]
     [SerializeField] float voyanteTextDelay = 2.0f;
     [SerializeField] float voyanteTextDuration = 3.0f;
     [SerializeField] float voyanteTextShakeIntensity = 2.0f;
+    [SerializeField] float dealTime = 0.4f;
 
     [Header("Client")]
     [SerializeField] float clientWalkTime = 3.0f;
@@ -55,6 +57,7 @@ public class DialogueViewer : MonoBehaviour
     [Header("Fade Settings")]
     [SerializeField] float fadeDuration = 1.0f;
     [SerializeField] float blackScreenDuration = 1.0f;
+    [SerializeField] float defaultFadeDuration = 1.0f;
 
     public bool canGetToNextDialogue;
 
@@ -88,6 +91,7 @@ public class DialogueViewer : MonoBehaviour
         }
         if (newNode.IsNewClient())
         {
+            PlayClientEntranceSound(newNode);
             StartCoroutine(ClientWalkAnimation());
             ChangeClientSkin(newNode.title.Split("_")[0]);
             if (newNode.IsQuestion())
@@ -151,6 +155,39 @@ public class DialogueViewer : MonoBehaviour
         }
     }
 
+    private void PlayClientEntranceSound(Node newNode) {
+        switch (newNode.title.Split("_")[0])
+        {
+            case "Alex":
+                AudioManager.Instance.PlaySound("clientSalarieEntree");
+                clientWalkTime = AudioManager.Instance.GetLength("clientSalarieEntree");
+                fadeDuration = AudioManager.Instance.GetLength("clientSalarieEntree");
+                break;
+            case "Religieux":
+                AudioManager.Instance.PlaySound("clientReligieuxEntree");
+                clientWalkTime = AudioManager.Instance.GetLength("clientReligieuxEntree");
+                fadeDuration = AudioManager.Instance.GetLength("clientReligieuxEntree");
+                break;
+            case "Cassandre":
+                AudioManager.Instance.PlaySound("clientAdoEntree");
+                clientWalkTime = AudioManager.Instance.GetLength("clientAdoEntree");
+                fadeDuration = AudioManager.Instance.GetLength("clientAdoEntree");
+                break;
+            case "Vache":
+                AudioManager.Instance.PlaySound("clientVacheEntree");
+                clientWalkTime = AudioManager.Instance.GetLength("clientVacheEntree");
+                fadeDuration = AudioManager.Instance.GetLength("clientVacheEntree");
+                break;
+            case "Melvin":
+                AudioManager.Instance.PlaySound("clientPolitiqueEntree");
+                clientWalkTime = AudioManager.Instance.GetLength("clientPolitiqueEntree");
+                fadeDuration = AudioManager.Instance.GetLength("clientPolitiqueEntree");
+                break;
+            default:
+                break;
+        }
+    }
+
     private void ClearCards()
     {
         foreach (Card card in cards)
@@ -175,6 +212,7 @@ public class DialogueViewer : MonoBehaviour
         yield return new WaitForSeconds(blackScreenDuration);
 
         t = 0f;
+        fadeDuration = defaultFadeDuration;
         while (t < fadeDuration)
         {
             t += Time.deltaTime;
@@ -209,7 +247,7 @@ public class DialogueViewer : MonoBehaviour
             cards.Add(newCard);
         }
 
-        cardSpawner.StartSpawnCards(spawnPositions, cards, startScale, endScale);
+        cardSpawner.StartSpawnCards(spawnPositions, cards, startScale, endScale, dealTime);
     }
 
     private void ChangeCardSkin(Card card, string skinName)
@@ -314,6 +352,7 @@ public class DialogueViewer : MonoBehaviour
 
     public void UseCard(Card card, int index)
     {
+        AudioManager.Instance.PlaySound("cardUsed");
         OnNodeSelected(index);
         cards.Remove(card);
         Destroy(card.gameObject);

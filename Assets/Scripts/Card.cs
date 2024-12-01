@@ -18,6 +18,11 @@ public class Card : MonoBehaviour
     RectTransform dragZonePanel;
     Image dragZoneImage;
 
+    [Header("Sounds")]
+    [SerializeField] AudioSource cardUsedSound;
+    [SerializeField] AudioSource cardHoverSound;
+    private bool hasPlayedSound;
+
     public TMPro.TextMeshProUGUI debugText;
     
     private float acceleration = 9.8f;
@@ -97,6 +102,7 @@ public class Card : MonoBehaviour
             ZoomOnCard();
             RepositionInBounds();
         } else {
+            hasPlayedSound = false;
             cardRectTransform.localScale = Vector3.one * defaultScale;
         }
         // Debug.Log("Mouse over " + cardName.text + " " + isOver);
@@ -105,6 +111,10 @@ public class Card : MonoBehaviour
 
     private void ZoomOnCard() {
         if (CardManager.Instance.isSpawningCards) return;
+        if (!hasPlayedSound) {
+            AudioManager.Instance.PlaySound("cardHover");
+            hasPlayedSound = true;
+        }
         cardRectTransform.localScale = Vector3.one * defaultScale * 1.5f;
     }
 
