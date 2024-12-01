@@ -20,6 +20,7 @@ public class DialogueViewer : MonoBehaviour
     [SerializeField] GameObject fadePanel;
     [SerializeField] SlowTyper descriptionBody;
     [SerializeField] PauseMenu pauseMenu;
+    [SerializeField] DuplicateCard cardSpawner;
 
     [Header("Settings")]
     [SerializeField] float voyanteTextDelay = 2.0f;
@@ -185,6 +186,12 @@ public class DialogueViewer : MonoBehaviour
 
     private void SpawnCards(Node newNode)
     {
+        CardManager.Instance.isSpawningCards = true;
+        Vector2[] spawnPositions = new Vector2[] { new Vector2(-200, -200), new Vector2(-100, -200), new Vector2(0, -200), new Vector2(100, -200) };
+
+        Vector3 startScale = new Vector3(0, 0, 0);
+        Vector3 endScale = new Vector3(cardPrefab.transform.localScale.x, cardPrefab.transform.localScale.y, cardPrefab.transform.localScale.z);
+
         for (int i = 0; i < newNode.responses.Count; i++)
         {
             Card newCard = Instantiate(cardPrefab, CardManager.Instance.cardsHolder.transform).GetComponent<Card>();
@@ -192,7 +199,7 @@ public class DialogueViewer : MonoBehaviour
             newCard.gameObject.name = newNode.responses[i].displayText;
             RectTransform cardRectTransform = newCard.GetComponent<RectTransform>();
             RectTransform canvasRectTransform = CardManager.Instance.canvasRectTransform;
-            cardRectTransform.anchoredPosition = new Vector2(i * 100 - 200, -200);
+            newCard.transform.localScale = startScale;
             newCard.SetName(newNode.responses[i].displayText);
             newCard.SetButtonAction(delegate { OnNodeSelected(i); });
 
@@ -200,6 +207,8 @@ public class DialogueViewer : MonoBehaviour
 
             cards.Add(newCard);
         }
+
+        cardSpawner.StartSpawnCards(spawnPositions, cards, startScale, endScale);
     }
 
     private void ChangeCardSkin(Card card, string skinName)

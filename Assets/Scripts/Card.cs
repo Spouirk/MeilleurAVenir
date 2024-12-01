@@ -92,6 +92,7 @@ public class Card : MonoBehaviour
     }
 
     public void OnMouseHover(bool isOver) {
+        if (CardManager.Instance.isSpawningCards) return;
         if (!isDragging && isOver) {
             ZoomOnCard();
             RepositionInBounds();
@@ -103,6 +104,7 @@ public class Card : MonoBehaviour
     }
 
     private void ZoomOnCard() {
+        if (CardManager.Instance.isSpawningCards) return;
         cardRectTransform.localScale = Vector3.one * defaultScale * 1.5f;
     }
 

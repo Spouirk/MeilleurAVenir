@@ -3,6 +3,7 @@ using UnityEngine.UI;
 using System.Collections;
 using UnityEngine.EventSystems;
 using System.Collections.Generic;
+using UnityEngine.Events;
 
 public class DuplicateCard : MonoBehaviour
 {
@@ -16,110 +17,86 @@ public class DuplicateCard : MonoBehaviour
     private float delayBetweenSpawns = 0.2f;
 
     [SerializeField]
-    private bool isSpawning = false;
+    private bool hasSpawnedCard = false;
+
+    private Vector2[] positions;
+    private List<Card> cards;
+    private Vector3 startScale;
+    private Vector3 endScale;
+
+    [SerializeField] GameObject spawnPoint;
+
 
     void Update()
     {
-        if (Input.GetMouseButtonDown(0))
+        // if (Input.GetMouseButtonDown(0))
+        // {
+        //     PointerEventData pointerData = new PointerEventData(EventSystem.current);
+        //     pointerData.position = Input.mousePosition;
+
+        //     List<RaycastResult> results = new List<RaycastResult>();
+        //     EventSystem.current.RaycastAll(pointerData, results);
+
+        //     bool clickedOnThisCard = false;
+        //     foreach (RaycastResult result in results)
+        //     {
+        //         if (result.gameObject == gameObject)
+        //         {
+        //             clickedOnThisCard = true;
+        //             break;
+        //         }
+        //     }
+
+        //     if (clickedOnThisCard && !hasSpawnedCard)
+        //     {
+        //         Debug.Log("Clic sur la carte principale");
+        //         StartCoroutine(SpawnCardsRoutine());
+        //     }
+        // }
+    }
+
+    public void StartSpawnCards(Vector2[] positions, List<Card> cards, Vector3 startScale, Vector3 endScale)
+    {
+        if (!hasSpawnedCard)
         {
-            PointerEventData pointerData = new PointerEventData(EventSystem.current);
-            pointerData.position = Input.mousePosition;
-
-            List<RaycastResult> results = new List<RaycastResult>();
-            EventSystem.current.RaycastAll(pointerData, results);
-
-            bool clickedOnThisCard = false;
-            foreach (RaycastResult result in results)
-            {
-                if (result.gameObject == gameObject)
-                {
-                    clickedOnThisCard = true;
-                    break;
-                }
-            }
-
-            if (clickedOnThisCard && !isSpawning)
-            {
-                Debug.Log("Clic sur la carte principale");
-                StartCoroutine(SpawnCardsRoutine());
-            }
+            this.positions = positions;
+            this.cards = cards;
+            this.startScale = startScale;
+            this.endScale = endScale;
+            StartCoroutine(SpawnCardsRoutine());
         }
     }
 
     IEnumerator SpawnCardsRoutine()
     {
-        isSpawning = true;
-        RectTransform mainCardRect = GetComponent<RectTransform>();
-        Vector2 startPosition = mainCardRect.anchoredPosition;
-
-        Vector2[] clonePositions = new Vector2[]
-        {
-            new Vector2( 249, -360),
-            new Vector2(-108, -360),
-            new Vector2(-464, -360),
-            new Vector2(-811, -360)
-        };
-
-        Debug.Log($"Nombre de positions : {clonePositions.Length}");
+        hasSpawnedCard = true;
+        Vector2 startPosition = spawnPoint.GetComponent<RectTransform>().anchoredPosition;
 
         if (cardPrefab != null && targetCanvas != null)
         {
-            foreach (Vector2 endPosition in clonePositions)
+            int i = 0;
+            foreach (Vector2 endPosition in positions)
             {
-                // Créer le clone
-                GameObject duplicateCard = Instantiate(cardPrefab, targetCanvas.transform);
+                Card duplicateCard = cards[i];
                 RectTransform duplicateRect = duplicateCard.GetComponent<RectTransform>();
                 duplicateRect.anchoredPosition = startPosition;
-
-                // Supprimer les scripts DuplicateCard existants
-                DuplicateCard[] duplicateScripts = duplicateCard.GetComponentsInChildren<DuplicateCard>();
-                foreach (DuplicateCard script in duplicateScripts)
-                {
-                    if (script != this) Destroy(script);
-                }
-
-                // Récupérer ou ajouter le DraggableCard
-                DraggableCard draggableCard = duplicateCard.GetComponent<DraggableCard>();
-                if (draggableCard == null)
-                {
-                    draggableCard = duplicateCard.AddComponent<DraggableCard>();
-                }
-
-                // S'assurer que la carte est visible
-                Image cardImage = duplicateCard.GetComponent<Image>();
-                if (cardImage != null)
-                {
-                    Color color = cardImage.color;
-                    color.a = 1f;
-                    cardImage.color = color;
-                }
-
-                // Logs de debug
-                Debug.Log($"Création de la carte à la position: {endPosition}");
-                Debug.Log($"Canvas scale factor: {targetCanvas.scaleFactor}");
-                Debug.Log($"Card Image component exists: {cardImage != null}");
 
                 // Animer la carte
                 StartCoroutine(AnimateCardDealing(duplicateCard, startPosition, endPosition));
 
                 // Attendre que l'animation de distribution soit terminée avant de jouer l'animation d'apparition
                 yield return StartCoroutine(AnimateCardDealing(duplicateCard, startPosition, endPosition));
-                draggableCard.PlayAppearAnimation();
 
+                i++;
                 yield return new WaitForSeconds(delayBetweenSpawns);
             }
+            CardManager.Instance.isSpawningCards = false;
         }
-        else
-        {
-            Debug.LogError("Card Prefab ou Canvas non assigné!");
-        }
-
-        isSpawning = false;
     }
 
-    private IEnumerator AnimateCardDealing(GameObject card, Vector2 startPos, Vector2 endPos)
+    private IEnumerator AnimateCardDealing(Card card, Vector2 startPos, Vector2 endPos)
     {
-        float duration = 0.5f;
+        float duration = 0.2f;
         float elapsedTime = 0;
 
         RectTransform rectTransform = card.GetComponent<RectTransform>();
@@ -128,8 +105,6 @@ public class DuplicateCard : MonoBehaviour
 
         Vector3 startRotation = new Vector3(0, 0, -45);
         Vector3 endRotation = Vector3.zero;
-        Vector3 startScale = Vector3.zero;
-        Vector3 endScale = Vector3.one;
 
         while (elapsedTime < duration)
         {

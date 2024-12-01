@@ -9,6 +9,8 @@ public class CardManager : MonoBehaviour
 
     Dictionary<string, string> dialogueVariable = new Dictionary<string, string>();
 
+    public bool isSpawningCards;
+
     public string GetVariable(string variableName)
     {
         string returnValue;
