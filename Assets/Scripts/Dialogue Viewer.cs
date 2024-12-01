@@ -19,6 +19,7 @@ public class DialogueViewer : MonoBehaviour
     [SerializeField] GameObject cardPrefab;
     [SerializeField] GameObject fadePanel;
     [SerializeField] SlowTyper descriptionBody;
+    [SerializeField] PauseMenu pauseMenu;
 
     [Header("Settings")]
     [SerializeField] float voyanteTextDelay = 2.0f;
@@ -41,6 +42,18 @@ public class DialogueViewer : MonoBehaviour
     [Header("Cards skin")]
     [SerializeField] Sprite cardLovers;
     [SerializeField] Sprite cardChariot;
+    [SerializeField] Sprite cardPapesse;
+    [SerializeField] Sprite cardDeath;
+    [SerializeField] Sprite cardHermit;
+    [SerializeField] Sprite cardLoversInverse;
+    [SerializeField] Sprite cardChariotInverse;
+    [SerializeField] Sprite cardPapesseInverse;
+    [SerializeField] Sprite cardDeathInverse;
+    [SerializeField] Sprite cardHermitInverse;
+
+    [Header("Fade Settings")]
+    [SerializeField] float fadeDuration = 1.0f;
+    [SerializeField] float blackScreenDuration = 1.0f;
 
     public bool canGetToNextDialogue;
 
@@ -147,8 +160,6 @@ public class DialogueViewer : MonoBehaviour
 
     private IEnumerator Fade()
     {
-        float fadeDuration = 1.0f;
-        float blackScreenDuration = 1.0f;
         txtTitle.transform.parent.gameObject.SetActive(false);
 
 
@@ -185,48 +196,110 @@ public class DialogueViewer : MonoBehaviour
             newCard.SetName(newNode.responses[i].displayText);
             newCard.SetButtonAction(delegate { OnNodeSelected(i); });
 
-            switch (newNode.responses[i].displayText)
-            {
-                case "The Lovers":
-                    newCard.SetImage(cardLovers);
-                    break;
-                case "The Chariot":
-                    newCard.SetImage(cardChariot);
-                    break;
-                default:
-                    break;
-            }
+            ChangeCardSkin(newCard, newNode.responses[i].displayText);
 
             cards.Add(newCard);
         }
     }
 
+    private void ChangeCardSkin(Card card, string skinName)
+    {
+        switch (skinName)
+        {
+            case "Les Amoureux":
+                card.SetImage(cardLovers);
+                break;
+            case "Le Chariot":
+                card.SetImage(cardChariot);
+                break;
+            case "La Papesse":
+                card.SetImage(cardPapesse);
+                break;
+            case "La Mort":
+                card.SetImage(cardDeath);
+                break;
+            case "L'Hermite":
+                card.SetImage(cardHermit);
+                break;
+            case "Les Amoureux Inversés":
+                card.SetImage(cardLoversInverse);
+                break;
+            case "Le Chariot Inversé":
+                card.SetImage(cardChariotInverse);
+                break;
+            case "La Papesse Inversée":
+                card.SetImage(cardPapesseInverse);
+                break;
+            case "La Mort Inversée":
+                card.SetImage(cardDeathInverse);
+                break;
+            case "L'Hermite Inversé":
+                card.SetImage(cardHermitInverse);
+                break;
+            default:
+                break;
+        }
+    }
+
     private void InitializeCards(Node newNode)
     {
+        bool isInverse = newNode.IsInverse();
         for (int i = 0; i < newNode.responses.Count; i++)
         {
             int currentIndex = i;
             Card card = cards[currentIndex];
 
-            cards[currentIndex].SetName(newNode.responses[currentIndex].displayText);
             cards[currentIndex].SetButtonAction(delegate { UseCard(card, currentIndex); });
+            if (isInverse) {
+                StartCoroutine(FlipCard(card, newNode.responses[i].displayText));
+                continue;
+            }
+            cards[currentIndex].SetName(newNode.responses[currentIndex].displayText);
+            ChangeCardSkin(card, newNode.responses[i].displayText);
         }
     }
 
     private void SetCards(Node newNode)
     {
+        bool isInverse = newNode.IsInverse();
         for (int i = 0; i < newNode.responses.Count; i++)
         {
             int currentIndex = i;
 
             foreach (Card card in cards)
             {
-                if (card.GetName() == newNode.responses[i].displayText)
+                if (card.GetName() == newNode.responses[i].displayText.Split(" Inversé")[0])
                 {
                     card.SetButtonAction(delegate { UseCard(card, currentIndex); });
+                    if (isInverse) {
+                        StartCoroutine(FlipCard(card, newNode.responses[i].displayText));
+                        continue;
+                    }
+                    card.SetName(newNode.responses[i].displayText);
+                    ChangeCardSkin(card, newNode.responses[i].displayText);
                 }
             }
         }
+    }
+
+    private IEnumerator FlipCard(Card card, string newName) {
+
+        float flipTime = 0.5f;
+        
+        CardManager.Instance.canPlayCard = false;
+
+        float t = 0;
+        while (t < flipTime)
+        {
+            t += Time.deltaTime;
+            card.transform.rotation = Quaternion.Lerp(Quaternion.identity, Quaternion.Euler(0, 0, 180), t / flipTime);
+            yield return null;
+        }
+
+        card.SetName(newName);
+        ChangeCardSkin(card, newName);
+        card.transform.rotation = Quaternion.Euler(0, 0, 0);
+        CardManager.Instance.canPlayCard = true;
     }
 
     public void UseCard(Card card, int index)
@@ -272,7 +345,7 @@ public class DialogueViewer : MonoBehaviour
 
     private IEnumerator WaitForInputSkip()
     {
-        while (!Input.GetKeyDown(KeyCode.Space) && !Input.GetMouseButtonDown(0))
+        while (pauseMenu.IsGamePaused() || !Input.GetKeyDown(KeyCode.Space) && !Input.GetMouseButtonDown(0))
         {
             yield return null;
         }

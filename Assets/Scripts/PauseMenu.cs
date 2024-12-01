@@ -18,6 +18,7 @@ public class PauseMenu : MonoBehaviour
     void Update()
     {
         if(Input.GetKeyDown(KeyCode.Escape)) {
+            Debug.Log("Escape pressed");
             if(gameIsPaused) {
                 ResumeGame();
             }
@@ -45,5 +46,9 @@ public class PauseMenu : MonoBehaviour
         gameIsPaused = false;
         Time.timeScale = 1;
         SceneManager.LoadScene("Menu");
+    }
+
+    public bool IsGamePaused() {
+        return gameIsPaused;
     }
 }
