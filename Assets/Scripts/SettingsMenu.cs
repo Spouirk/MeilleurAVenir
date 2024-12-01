@@ -38,9 +38,19 @@ public class SettingsMenu : MonoBehaviour
         fullScreenToggle.isOn = Screen.fullScreen;
     }
 
-    public void SetVolume(float volume)
+    public void SetMainVolume(float volume)
     {
         audioMixer.SetFloat("volume", volume);
+    }
+
+    public void SetMusicVolume(float volume)
+    {
+        audioMixer.SetFloat("music", volume);
+    }
+
+    public void SetSoundVolume(float volume)
+    {
+        audioMixer.SetFloat("sound", volume);
     }
 
     public void SetFullScreen(bool isFullScreen)
