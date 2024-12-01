@@ -22,6 +22,7 @@ public class DialogueObject {
     public class Node {
         public string title;
         public string text;
+        public string tone;
         public List<string> tags;
         public List<Response> responses;
 
@@ -76,7 +77,23 @@ public class DialogueObject {
             IF,
             ELSEIF,
             ELSE,
+            SOUND,
             DEFAULT
+        }
+
+        private enum SOUND_TYPE
+        {
+            ALEX_ENTREE,
+            ALEX_DUBITATIF,
+            ALEX_DESESPERE,
+            ALEX_ENTHOUSIASTE,
+            CASSANDRE_ENTREE,
+            CASSANDRE_CONFIANTE,
+            CASSANDRE_PROVOCATRICE,
+            CASSANDRE_DEDAIGNEUSE,
+            MELVIN_ENTREE,
+            MELVIN_AGACE,
+            MELVIN_DEDAUGNEUX
         }
 
         public string GetText()
@@ -125,6 +142,9 @@ public class DialogueObject {
                             if (parsedText.Length != 0) parsedText += "\n";
                             parsedText += match.Groups["text"].Value;
                             break;
+                        case COMMAND_TYPE.SOUND:
+                            playSound(match.Groups["commande"].Value);
+                            break;
                         case COMMAND_TYPE.DEFAULT:
                             break;
                     }
@@ -145,12 +165,22 @@ public class DialogueObject {
             return conditionVariableValue == conditionIfMatch.Groups["value"].Value;
         }
 
+        private void playSound(string sound)
+        {
+            Regex patternSound = new Regex(@"(sound): (?<soundType>.*)");
+            Match soundMatch = patternSound.Match(sound);
+
+            string soundType = soundMatch.Groups["type"].Value;
+            Debug.Log(soundType);
+        }
+
         private COMMAND_TYPE GetCommandType(string command)
         { 
             if(command.StartsWith("set:")) return COMMAND_TYPE.SET;
             if(command.StartsWith("if")) return COMMAND_TYPE.IF;
             if(command.StartsWith("else-if")) return COMMAND_TYPE.ELSEIF;
             if(command.StartsWith("else")) return COMMAND_TYPE.ELSE;
+            if(command.StartsWith("sound")) return COMMAND_TYPE.SOUND;
             return COMMAND_TYPE.DEFAULT;
         }
 
