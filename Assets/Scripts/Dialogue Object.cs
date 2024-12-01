@@ -98,12 +98,17 @@ public class DialogueObject {
 
         public string GetText()
         {
-            Regex patternExtract = new Regex(@"\(\((?<commande>.*)\)\)(.*\[(?<text>.*)\]|)");
+            return Parse(text);
+        }
+
+        private string Parse( string textToParse )
+        {
+            Regex patternExtract = new Regex(@"\(\((?<commande>[^)]*)\)\)([^[]*\[(?<text>.*)\]|)");
             bool isConditionAlreadyValide = false;
 
             string parsedText = "";
 
-            foreach(string line in text.Split("\n"))
+            foreach(string line in textToParse.Split("\n"))
             {
                 Match match = patternExtract.Match(line);
                 if (match.Success){
@@ -123,7 +128,7 @@ public class DialogueObject {
                             {
                                 isConditionAlreadyValide = true ;
                                 if (parsedText.Length != 0) parsedText += "\n";
-                                parsedText +=  match.Groups["text"].Value;
+                                parsedText += Parse(match.Groups["text"].Value);
                             }
 
                             break;
@@ -134,13 +139,13 @@ public class DialogueObject {
                             {
                                 isConditionAlreadyValide = true;
                                 if (parsedText.Length != 0) parsedText += "\n";
-                                parsedText += match.Groups["text"].Value;
+                                parsedText += Parse(match.Groups["text"].Value);
                             }
                             break;
                         case COMMAND_TYPE.ELSE:
                             if (isConditionAlreadyValide) break;
                             if (parsedText.Length != 0) parsedText += "\n";
-                            parsedText += match.Groups["text"].Value;
+                            parsedText += Parse(match.Groups["text"].Value);
                             break;
                         case COMMAND_TYPE.SOUND:
                             playSound(match.Groups["commande"].Value);
