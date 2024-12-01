@@ -8,8 +8,11 @@ using System.Linq;
 public class SettingsMenu : MonoBehaviour
 {
     [SerializeField] private AudioMixer audioMixer;
-    [SerializeField] TMPro.TMP_Dropdown resolutionDropDown;
-    [SerializeField] Toggle fullScreenToggle;
+    [SerializeField] private TMPro.TMP_Dropdown resolutionDropDown;
+    [SerializeField] private Toggle fullScreenToggle;
+    [SerializeField] private Slider generalSlider;
+    [SerializeField] private Slider musicSlider;
+    [SerializeField] private Slider soundSlider;
     Resolution[] resolutions;
 
     private int currentResolution;
@@ -36,6 +39,16 @@ public class SettingsMenu : MonoBehaviour
         resolutionDropDown.value = currentResolution;
         resolutionDropDown.RefreshShownValue();
         fullScreenToggle.isOn = Screen.fullScreen;
+
+        float general = 0f;
+        float music = 0f;
+        float sound = 0f;
+        audioMixer.GetFloat("volume", out general);
+        audioMixer.GetFloat("music", out music);
+        audioMixer.GetFloat("sound", out sound);
+        generalSlider.value = general;
+        musicSlider.value = music;
+        soundSlider.value = sound;
     }
 
     public void SetMainVolume(float volume)

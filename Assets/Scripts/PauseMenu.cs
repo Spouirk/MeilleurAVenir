@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 public class PauseMenu : MonoBehaviour
 {
     [SerializeField] private GameObject pausePanel;
+    [SerializeField] private GameObject settingsPanel;
 
     private bool gameIsPaused;
 
@@ -18,9 +19,11 @@ public class PauseMenu : MonoBehaviour
     void Update()
     {
         if(Input.GetKeyDown(KeyCode.Escape)) {
-            Debug.Log("Escape pressed");
             if(gameIsPaused) {
-                ResumeGame();
+                if(settingsPanel.activeSelf) {
+                    CloseSettings();
+                }
+                else ResumeGame();
             }
             else {
                 PauseGame();
@@ -38,6 +41,7 @@ public class PauseMenu : MonoBehaviour
     {
         gameIsPaused = false;
         Time.timeScale = 1;
+        CloseSettings();
         pausePanel.SetActive(false);
     }
 
@@ -50,5 +54,15 @@ public class PauseMenu : MonoBehaviour
 
     public bool IsGamePaused() {
         return gameIsPaused;
+    }
+
+    public void Settings()
+    {
+        settingsPanel.SetActive(true);
+    }
+
+    public void CloseSettings()
+    {
+        settingsPanel.SetActive(false);
     }
 }
