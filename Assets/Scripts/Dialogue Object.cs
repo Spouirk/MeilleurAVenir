@@ -160,6 +160,7 @@ public class DialogueObject {
             Regex patternExtractIf = new Regex(@"(else-if|if): \$(?<variableName>.*) is \'(?<value>.*)\'");
             Match conditionIfMatch = patternExtractIf.Match(condition);
 
+            Debug.Log(condition);
             string conditionVariableValue = CardManager.Instance.GetVariable(conditionIfMatch.Groups["variableName"].Value);
 
             return conditionVariableValue == conditionIfMatch.Groups["value"].Value;

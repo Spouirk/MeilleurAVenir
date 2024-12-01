@@ -6,6 +6,8 @@ using static DialogueObject;
 using UnityEngine.Events;
 using System;
 using System.Runtime.InteropServices;
+using UnityEditor.SearchService;
+using UnityEngine.SceneManagement;
 
 public class DialogueViewer : MonoBehaviour
 {
@@ -18,6 +20,9 @@ public class DialogueViewer : MonoBehaviour
     [SerializeField] TMPro.TextMeshProUGUI voyanteText;
     [SerializeField] GameObject cardPrefab;
     [SerializeField] GameObject fadePanel;
+    [SerializeField] TMPro.TextMeshProUGUI aubeText;
+    [SerializeField] TMPro.TextMeshProUGUI newWeekText;
+    [SerializeField] TMPro.TextMeshProUGUI remainingText;
     [SerializeField] SlowTyper descriptionBody;
     [SerializeField] PauseMenu pauseMenu;
     [SerializeField] DuplicateCard cardSpawner;
@@ -35,12 +40,15 @@ public class DialogueViewer : MonoBehaviour
     [SerializeField] GameObject clientOrigin;
     [SerializeField] GameObject clientDestination;
     [SerializeField] GameObject clientOutPoint;
+    private string currentClientEntrySound;
 
     [Header("Skins")]
     [SerializeField] Sprite SalaryMan;
     [SerializeField] Sprite Religieux;
     [SerializeField] Sprite Ado;
     [SerializeField] Sprite Vache;
+    [SerializeField] Sprite Politicien;
+    [SerializeField] Sprite HommeMarie;
 
     [Header("Cards skin")]
     [SerializeField] Sprite cardLovers;
@@ -48,14 +56,17 @@ public class DialogueViewer : MonoBehaviour
     [SerializeField] Sprite cardPapesse;
     [SerializeField] Sprite cardDeath;
     [SerializeField] Sprite cardHermit;
+    [SerializeField] Sprite cardEmperor;
     [SerializeField] Sprite cardLoversInverse;
     [SerializeField] Sprite cardChariotInverse;
     [SerializeField] Sprite cardPapesseInverse;
     [SerializeField] Sprite cardDeathInverse;
     [SerializeField] Sprite cardHermitInverse;
+    [SerializeField] Sprite cardEmperorInverse;
 
     [Header("Fade Settings")]
     [SerializeField] float fadeDuration = 1.0f;
+    [SerializeField] float weekFadeDuration = 3.0f;
     [SerializeField] float blackScreenDuration = 1.0f;
     [SerializeField] float defaultFadeDuration = 1.0f;
 
@@ -72,6 +83,9 @@ public class DialogueViewer : MonoBehaviour
     private void OnNodeEntered(Node newNode)
     {
         CardManager.Instance.canPlayCard = false;
+        if (newNode.IsEndNode()) {
+            SceneManager.LoadScene("Menu");
+        }
         if (newNode.isDescription())
         {
             ShowDescription(newNode);
@@ -83,6 +97,11 @@ public class DialogueViewer : MonoBehaviour
             StartCoroutine(Fade());
             if (client.transform.position == clientDestination.transform.position) StartCoroutine(ClientExitAnimation());
         }
+        if (newNode.IsEndOfWeek()) {
+            StartCoroutine(FadeEndOfWeek(newNode));
+            ClearCards();
+            if (client.transform.position == clientDestination.transform.position) StartCoroutine(ClientExitAnimation());
+        } 
         if (newNode.IsNewWeek())
         {
             ClearCards();
@@ -144,11 +163,14 @@ public class DialogueViewer : MonoBehaviour
             case "Cassandre":
                 client.GetComponent<Image>().sprite = Ado;
                 break;
-            case "Vache":
+            case "Marguerite":
                 client.GetComponent<Image>().sprite = Vache;
                 break;
             case "Melvin":
-                client.GetComponent<Image>().sprite = Vache;
+                client.GetComponent<Image>().sprite = Politicien;
+                break;
+            case "Eustache":
+                client.GetComponent<Image>().sprite = HommeMarie;
                 break;
             default:
                 break;
@@ -159,33 +181,26 @@ public class DialogueViewer : MonoBehaviour
         switch (newNode.title.Split("_")[0])
         {
             case "Alex":
-                AudioManager.Instance.PlaySound("clientSalarieEntree");
-                clientWalkTime = AudioManager.Instance.GetLength("clientSalarieEntree");
-                fadeDuration = AudioManager.Instance.GetLength("clientSalarieEntree");
+                currentClientEntrySound = "clientSalarieEntree";
                 break;
             case "Religieux":
-                AudioManager.Instance.PlaySound("clientReligieuxEntree");
-                clientWalkTime = AudioManager.Instance.GetLength("clientReligieuxEntree");
-                fadeDuration = AudioManager.Instance.GetLength("clientReligieuxEntree");
+                currentClientEntrySound = "clientReligieuxEntree";
                 break;
             case "Cassandre":
-                AudioManager.Instance.PlaySound("clientAdoEntree");
-                clientWalkTime = AudioManager.Instance.GetLength("clientAdoEntree");
-                fadeDuration = AudioManager.Instance.GetLength("clientAdoEntree");
+                currentClientEntrySound = "clientAdoEntree";
                 break;
             case "Vache":
-                AudioManager.Instance.PlaySound("clientVacheEntree");
-                clientWalkTime = AudioManager.Instance.GetLength("clientVacheEntree");
-                fadeDuration = AudioManager.Instance.GetLength("clientVacheEntree");
+                currentClientEntrySound = "clientVacheEntree";
                 break;
             case "Melvin":
-                AudioManager.Instance.PlaySound("clientPolitiqueEntree");
-                clientWalkTime = AudioManager.Instance.GetLength("clientPolitiqueEntree");
-                fadeDuration = AudioManager.Instance.GetLength("clientPolitiqueEntree");
+                currentClientEntrySound = "clientPolitiqueEntree";
                 break;
             default:
                 break;
         }
+        AudioManager.Instance.PlaySound(currentClientEntrySound);
+        clientWalkTime = AudioManager.Instance.GetLength(currentClientEntrySound);
+        fadeDuration = AudioManager.Instance.GetLength(currentClientEntrySound);
     }
 
     private void ClearCards()
@@ -223,8 +238,60 @@ public class DialogueViewer : MonoBehaviour
         controller.ChooseResponse(0);
     }
 
+    private IEnumerator FadeEndOfWeek(Node newNode) {
+        txtTitle.transform.parent.gameObject.SetActive(false);
+        aubeText.gameObject.SetActive(true);
+        newWeekText.gameObject.SetActive(true);
+        remainingText.gameObject.SetActive(true);
+        switch (newNode.GetText()) {
+            case "Semaine 1":
+                newWeekText.text = "Premiere Semaine";
+                remainingText.text = "-3 Semaines Restantes-";
+                break;
+            case "Semaine 2":
+                newWeekText.text = "Deuxieme Semaine";
+                remainingText.text = "-2 Semaines Restantes-";
+                break;
+            case "Semaine 3":
+                newWeekText.text = "Derniere Semaine";
+                remainingText.text = "-1 Semaines Restantes-";
+                break;
+        }
+
+        float t = 0f;
+        while (t < weekFadeDuration)
+        {
+            t += Time.deltaTime;
+            fadePanel.GetComponent<Image>().color = Color.Lerp(Color.clear, Color.black, t / fadeDuration);
+            aubeText.color = Color.Lerp(Color.clear, Color.white, t / fadeDuration);
+            newWeekText.color = Color.Lerp(Color.clear, Color.white, t / fadeDuration);
+            remainingText.color = Color.Lerp(Color.clear, Color.white, t / fadeDuration);
+            yield return null;
+        }
+        yield return new WaitForSeconds(blackScreenDuration);
+
+        t = 0f;
+        fadeDuration = defaultFadeDuration;
+        while (t < weekFadeDuration)
+        {
+            t += Time.deltaTime;
+            fadePanel.GetComponent<Image>().color = Color.Lerp(Color.black, Color.clear, t / fadeDuration);
+            aubeText.color = Color.Lerp(Color.white, Color.clear, t / fadeDuration);
+            newWeekText.color = Color.Lerp(Color.white, Color.clear, t / fadeDuration);
+            remainingText.color = Color.Lerp(Color.white, Color.clear, t / fadeDuration);
+            yield return null;
+        }
+
+        aubeText.gameObject.SetActive(false);
+        newWeekText.gameObject.SetActive(false);
+        remainingText.gameObject.SetActive(false);
+        
+        controller.ChooseResponse(0);
+    }
+
     private void SpawnCards(Node newNode)
     {
+        Debug.Log("Spawning cards");
         CardManager.Instance.isSpawningCards = true;
         Vector2[] spawnPositions = new Vector2[] { new Vector2(-200, -200), new Vector2(-100, -200), new Vector2(0, -200), new Vector2(100, -200) };
 
@@ -269,6 +336,9 @@ public class DialogueViewer : MonoBehaviour
             case "L'Hermite":
                 card.SetImage(cardHermit);
                 break;
+            case "L'Empereur":
+                card.SetImage(cardEmperor);
+                break;
             case "Les Amoureux Inversés":
                 card.SetImage(cardLoversInverse);
                 break;
@@ -283,6 +353,9 @@ public class DialogueViewer : MonoBehaviour
                 break;
             case "L'Hermite Inversé":
                 card.SetImage(cardHermitInverse);
+                break;
+            case "L'Empereur Inversé":
+                card.SetImage(cardEmperorInverse);
                 break;
             default:
                 break;
@@ -421,6 +494,8 @@ public class DialogueViewer : MonoBehaviour
     private IEnumerator ClientExitAnimation()
     {
         client.transform.position = clientDestination.transform.position;
+
+        AudioManager.Instance.PlaySound(currentClientEntrySound);
 
         float t = 0;
         while (t < clientWalkTime)

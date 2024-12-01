@@ -12,14 +12,15 @@ Le meilleur reste à venir
  "tag-colors": {
   "START": "green",
   "PNJ": "blue",
-  "END": "red",
   "VOYANTE": "purple",
   "DESCRIPTION": "yellow",
   "FADE": "orange",
   "NEWCLIENT": "purple",
   "QUESTION": "blue",
   "NEWWEEK": "yellow",
-  "INVERSE": "purple"
+  "ENDOFWEEK": "orange",
+  "FLIP": "orange",
+  "INVERSE": "orange"
  }
 }
 
@@ -42,29 +43,31 @@ La Mort[[S1Death]]
 
 :: S1HighPriestess [VOYANTE] {"position":"925,900","size":"100,100"}
 ((set: $S1 to 'highpriestess'))
-Vous avez pioché la Papesse. C’est dans votre sagesse intérieure que votre spiritualité se révélera.
+C'est dans votre sagesse intérieure que votre spiritualité se révélera.
 [[Alex_5b]]
 
 :: S1Hermit [VOYANTE] {"position":"1075,900","size":"100,100"}
 ((set: $S1 to 'hermit'))
-Vous avez pioché l'Hermite. Cherchez en vous la sagesse qui vous guidera.
+Cherchez en vous la sagesse qui vous guidera.
 [[Alex_5b]]
 
 :: S1Death [VOYANTE] {"position":"625,900","size":"100,100"}
 ((set: $S1 to 'death'))
-Vous avez pioché la Mort. N’ayez plus peur de lâcher-prise, votre destin sera source de renouveau.
+N’ayez plus peur de lâcher prise, votre destin sera source de renouveau.
 [[Alex_5a]]
 
 :: S1Chariot [VOYANTE] {"position":"775,900","size":"100,100"}
 ((set: $S1 to 'chariot'))
-Vous avez pioché le Chariot. Il est temps de prendre le contrôle de votre destin, le triomphe est à la clef.
+Il est temps de prendre le contrôle de votre destin, le triomphe est à la clef.
 [[Alex_5a]]
 
-:: Alex_5a [PNJ] {"position":"700,1050","size":"100,100"}
+:: Alex_5a [PNJ SOUND] {"position":"700,1050","size":"100,100"}
+((sound: 'Alex_enthousiaste))
 Vous avez raison. Je dois me reprendre en main. Je sais ce qu’il me reste à faire !
 [[TransitionA1]]
 
-:: Alex_5b [PNJ] {"position":"1000,1050","size":"100,100"}
+:: Alex_5b [PNJ SOUND] {"position":"1000,1050","size":"100,100"}
+((sound: 'Alex_dubitatif'))
 Je… Je ne suis pas certain.e de comprendre ce que vous voulez dire. Je vais y réfléchir…
 [[TransitionA1]]
 
@@ -77,130 +80,137 @@ Je… Je ne suis pas certain.e de comprendre ce que vous voulez dire. Je vais y 
 ((else-if: $S1 is 'highpriestess'))[Pourtant tes tours ont fait renaître la foi de brebis qui étaient jusqu’alors égarées.]
 ((else-if: $S1 is 'hermit'))[Pourtant tes tours ont fait renaître la foi de brebis qui étaient jusqu’alors égarées.]
 ((else-if: $S1 is 'chariot'))[Pourtant le·a dernier·e à t'avoir consulté a eu l'audace de lancer un mouvement social coriace.]
-[[Cassandre_2]] 
+[[Cassandre_2]]
 
 :: A1HighPriestess [VOYANTE] {"position":"625,1600","size":"100,100"}
 ((set: $A1 to 'highpriestess'))
-Vous avez pioché la Papesse. Patience, la sagesse intérieure est proche, suivez votre intuition et tous les mystères se révéleront à vous.
+Patience, la sagesse intérieure est proche. Suivez votre intuition et tous les mystères se révéleront à vous.
 [[Cassandre_3]]
 
 :: A1Chariot [VOYANTE] {"position":"775,1600","size":"100,100"}
 ((set: $A1 to 'chariot'))
-Vous avez pioché le Chariot. La détermination est la clé du triomphe. Gardez le contrôle car le voyage est long.
+La détermination est la clé du triomphe. Gardez le contrôle car le voyage est long.
 [[Cassandre_3]]
 
 :: A1Hermit [VOYANTE] {"position":"925,1600","size":"100,100"}
 ((set: $A1 to 'hermit'))
-Vous avez pioché l'Hermite. Laissez-vous guider par votre voix intérieure, car c’est dans la solitude que vous trouverez la vérité.
+Laissez-vous guider par votre voix intérieure, car c’est dans la solitude que vous trouverez la vérité.
 [[Cassandre_3]]
 
 :: A1Death [VOYANTE] {"position":"1075,1600","size":"100,100"}
 ((set: $A1 to 'death'))
-Vous avez choisi la Mort. La fin d’un cycle s’annonce, n’est pas peur du renouveau et achève ta transformation.
+La fin d’un cycle s’annonce, n’aie pas peur du renouveau et achève ta transformation.
 [[Cassandre_3]]
 
 :: TransitionP1 [FADE] {"position":"850,1875","size":"100,100"}
 *Fondu au noir*
-[[P1]]
+[[P1_0]]
 
 :: P1HighPriestess! [VOYANTE] {"position":"1075,2425","size":"100,100"}
 ((set: $P1 to 'highpriestess'))
 Vous avez pioché la Papesse Inversée. Votre plus grand secret sera bientôt révélé, brisant toute la superficialité de votre être.
-[[Melvin_2b]]
+[[Melvin_3b]]
 
 :: P1Chariot! [VOYANTE] {"position":"925,2425","size":"100,100"}
 ((set: $P1 to 'chariot'))
 Vous avez pioché le Chariot Inversé. Le manque de direction pourra vous mener à l’échec, mais c’est bien la perte de contrôle qui vous sera fatal.
-[[Melvin_2b]]
+[[Melvin_3b]]
 
 :: P1Hermit! [VOYANTE] {"position":"625,2425","size":"100,100"}
 ((set: $P1 to 'hermit'))
 Vous avez pioché l'Hermite Inversée. C’est en refusant de regarder en vous que votre vie stagnera, isolez-vous trop et vous serez oublié.
-[[Melvin_2a]]
+[[Melvin_3a]]
 
 :: P1Death! [VOYANTE] {"position":"775,2425","size":"100,100"}
 ((set: $P1 to 'death'))
 Vous avez pioché la Mort Inversée. Rester statique vous conforte. Cessez ou l’échec sera à votre porte.
-[[Melvin_2a]]
+[[Melvin_3a]]
 
-:: Melvin_2a [PNJ] {"position":"700,2600","size":"100,100"}
+:: Melvin_3a [PNJ SOUND] {"position":"700,2600","size":"100,100"}
+((sound: 'Melvin_dedaigneux'))
 Vos cartes ne peuvent pas voir tout le potentiel qui sommeille en moi. Ma chance ne m’a jamais quitté et ce n’est pas vos néfastes prédictions qui changeront ma vision.
 [[TransitionWeek2]]
 
-:: Melvin_2b [PNJ] {"position":"1000,2600","size":"100,100"}
+:: Melvin_3b [PNJ SOUND] {"position":"1000,2600","size":"100,100"}
+((sound: 'Melvin_dedaigneux'))
 Comment osez-vous lancer de telles accusations ?! Je vous enverrai à la casse. Vous ne trouverez pas d'homme plus digne que moi et ce n’est pas de vous que ma réputation pâtira.
 [[TransitionWeek2]]
 
-:: TransitionWeek2 [END FADE] {"position":"850,2775","size":"100,100"}
-*FIN PROVISOIRE*
+:: TransitionWeek2 [ENDOFWEEK] {"position":"850,2700","size":"100,100"}
+Semaine 2
+[[R1_0]]
 
 :: Start [START DESCRIPTION] {"position":"400,125","size":"100,100"}
 Vous vous réveillez d’un long sommeil, tandis que des mains inconnues s’activent à vous remettre en marche. Après un long reboot de votre système, vous percevez des bribes d’un futur incertain.
 
-[Appuyer Sur Espace ou Clique Gauche]
-[[Intro_0]] 
+[Appuyer Sur Espace ou Clic Gauche]
+[[Intro_0]]
 
 :: Intro_0 [DESCRIPTION] {"position":"525,125","size":"100,100"}
 De la faible lumière aux rideaux occultants, tout dans cette pièce, vous fait comprendre que votre existence doit être un secret.
 
-[Appuyer Sur Espace ou Clique Gauche]
-[[Intro_1]] 
+[Appuyer Sur Espace ou Clic Gauche]
+[[Intro_1]]
 
 :: Intro_1 [DESCRIPTION] {"position":"650,125","size":"100,100"}
 Les bruits de pas et les quelques murmures dissimulés vous font pressentir que vous serez l’attraction interdite des curieux les plus aventureux.
 
-[[Intro_2]] 
+[[Intro_2]]
 
 :: Intro_2 [DESCRIPTION] {"position":"800,125","size":"100,100"}
 Mais maintenant, il est temps de lire votre destin pour vérifier l’intégrité de votre système.
-[[Intro_3]] 
+[[Intro_3]]
 
-:: Intro_3 [DESCRIPTION] {"position":"925,125","size":"100,100"}
+:: Intro_3 [DESCRIPTION SOUND] {"position":"925,125","size":"100,100"}
 Sur l’ensemble des 22 cartes de tarot de Marseille que vous possédiez, seules 6 ont survécu aux affres du temps.
-[[Intro_4]] 
+[[Intro_4]]
 
 :: Intro_4 [DESCRIPTION] {"position":"1050,125","size":"100,100"}
 Dans votre tirage, la Mort se révèle à vous. Vous parvenez à discerner des bribes du futur : votre temps est compté. Si vous ne changez pas votre destin, dans trois semaines, votre système sera mis définitivement hors service.
-[[TransitionWeek1]] 
+[[TransitionWeek1]]
 
-:: Week1_0 [DESCRIPTION] {"position":"1200,275","size":"100,100"}
+:: S1_0 [DESCRIPTION] {"position":"1200,275","size":"100,100"}
 En pleine nuit, des pas feutrés résonnent dans le bâtiment vide, brisant votre prison de solitude. Une tête passe brièvement dans l'entrebâillement de la porte avant de s’enfuir furtivement.
-[[Week1_1]] 
+[[Week1_1]]
 
 :: Week1_1 [DESCRIPTION] {"position":"1050,275","size":"100,100"}
 Quelques minutes plus tard, une ombre imposante s’avance d’un pas incertain et se place face à vous.
-[[Alex_0]] 
+[[Alex_0]]
 
-:: Alex_0 [PNJ NEWCLIENT] {"position":"850,275","size":"100,100"}
+:: Alex_0 [PNJ SOUND NEWCLIENT] {"position":"850,275","size":"100,100"}
+((sound: 'Alex_dubitatif'))
 Hmm… Comment fonctionne cette machine ?!
 [[Alex_1]]
 
 :: Alex_1 [PNJ] {"position":"850,400","size":"100,100"}
 “Décliner son identité… et partager son chagrin ?”
-[[Alex_2]] 
+[[Alex_2]]
 
 :: Alex_2 [PNJ] {"position":"850,525","size":"100,100"}
 Alex. Capricorn. Groupe sanguin A+.
 [[Alex_3]]
 
-:: Alex_3 [PNJ] {"position":"850,650","size":"100,100"}
+:: Alex_3 [PNJ SOUND] {"position":"850,650","size":"100,100"}
+((sound: 'Alex_desespere'))
 Je… Je n'en peux plus… Cette vie me fatigue… J’ai perdu la foi, j’ai perdu la passion. Le système ne peut plus rien pour moi. Mes voisins me détestent et mon patron me méprise.
 [[Alex_4]]
 
-:: Cassandre_0 [PNJ NEWCLIENT] {"position":"850,1225","size":"100,100"}
+:: Cassandre_0 [PNJ NEWCLIENT SOUND] {"position":"850,1225","size":"100,100"}
+((sound: 'Cassandre_confiante'))
 Cassandre ! Scorpion ! A Positif !
 Je sais de source sûre que ta sorcellerie n'est que poudre aux yeux.
 [[Cassandre_1]]
 
-:: Cassandre_3 [PNJ] {"position":"850,1750","size":"100,100"}
+:: Cassandre_3 [PNJ SOUND] {"position":"850,1750","size":"100,100"}
+((sound: 'Cassandre_dedaigneuse'))
 C’est en parlant de magie païenne que ton nom s’est fait connaître, pourtant aujourd’hui ce n’est qu’un vulgaire jeu pour enfant que tu m’as offert.
-[[TransitionP1]] 
+[[TransitionP1]]
 
-:: P1 [DESCRIPTION] {"position":"850,2000","size":"100,100"}
+:: P1_0 [DESCRIPTION] {"position":"850,2000","size":"100,100"}
 De loin, des pas lourds et confiants grondent, s’approchant avec assurance. Soudain, une carrure imposante se présente devant vous.
-[[Melvin_0]]
+[[P1_1]]
 
-:: Melvin_1 [PNJ QUESTION INVERSE] {"position":"850,2275","size":"100,100"}
+:: Melvin_2 [PNJ QUESTION INVERSE] {"position":"850,2275","size":"100,100"}
 ((set: $P1 to ''))
 Si votre temps se perd à aider les petites gens, il me paraît bien normal que moi aussi je bénéficie de vos talents.
 
@@ -209,22 +219,452 @@ Le Chariot Inversé[[P1Chariot!]]
 L'Hermite Inversé[[P1Hermit!]]
 La Mort Inversée[[P1Death!]]
 
-:: TransitionWeek1 [FADE] {"position":"1200,125","size":"100,100"}
-*fondu au noir*
-[[Week1_0]] 
+:: TransitionWeek1 [ENDOFWEEK] {"position":"1200,125","size":"100,100"}
+Semaine 1
+[[S1_0]]
 
-:: Melvin_0 [PNJ NEWCLIENT] {"position":"850,2150","size":"100,100"}
-Melvin, Scorpion, O+
-((if: $S1 is 'death'))[Vos actions ont eu le don de brusquer mon plus généreux donateur. Je n’ai plus de nouvelles de lui depuis qu’il essaye de mater cette émeute.]
-((else-if: $S1 is 'chariot'))[Vos actions ont eu le don de brusquer mon plus généreux donateur. Je n’ai plus de nouvelles de lui depuis qu’il essaye de mater cette émeute.]
-((else:))[Vos actions ont été bénéfiques aux fidèles de la Nouvelle Lune. Il m’est de plus en plus difficile d’ignorer leurs demandes depuis que vous avez éveillé une foi débordante dans leur nouveau prophète... Alex !]
+:: Melvin_0 [PNJ SOUND NEWCLIENT] {"position":"850,2150","size":"100,100"}
+Melvin. Scorpion. Groupe sanguin O+.
 [[Melvin_1]]
 
-:: Cassandre_2 [PNJ QUESTION] {"position":"850,1475","size":"100,100"}
+:: Cassandre_2 [PNJ QUESTION SOUND] {"position":"850,1475","size":"100,100"}
 ((set: $A1 to ''))
+((sound: 'Cassandre_provocatrice))
 Mais alors, dis-moi si tu l’oses. Quel est le destin de la plus grande disciple de la Nouvelle Lune ?
 
 La Papesse[[A1HighPriestess]]
 Le Chariot[[A1Chariot]]
 L'Hermite[[A1Hermit]]
 La Mort[[A1Death]]
+
+:: P1_1 [DESCRIPTION] {"position":"975,2075","size":"100,100"}
+Son aura dégage une énergie sombre perturbant votre tirage.
+[[Melvin_0]]
+
+:: Melvin_1 [PNJ] {"position":"725,2225","size":"100,100"}
+((if: $S1 is 'death'))[Vos actions ont eu le don de brusquer mon plus généreux donateur. Je n’ai plus de nouvelles de lui depuis qu’il essaye de mater cette émeute.]
+((else-if: $S1 is 'chariot'))[Vos actions ont eu le don de brusquer mon plus généreux donateur. Je n’ai plus de nouvelles de lui depuis qu’il essaye de mater cette émeute.]
+((else:))[Vos actions ont été bénéfiques aux fidèles de la Nouvelle Lune. Il m’est de plus en plus difficile d’ignorer leurs demandes depuis que vous avez éveillé une foi débordante dans leur nouveau prophète... Alex !]
+[[Melvin_2]]
+
+:: R1_0 [DESCRIPTION] {"position":"850,2825","size":"100,100"}
+Par l'entrebâillement de la porte, une ombre s’étire jusqu’au mur opposé.
+[[R1_1]]
+
+:: R1_1 [DESCRIPTION] {"position":"850,2950","size":"100,100"}
+D’un mouvement vif et élégant, une silhouette encapuchonnée se glisse jusqu’à vous.
+[[River_0]] 
+
+:: River_0 [PNJ SOUND NEWCLIENT] {"position":"850,3100","size":"100,100"}
+((if: $A1 is 'death'))[((sound: 'river_enerve'))[Créature du mal !]]
+((else:))[((sound: 'river_cordial))[Bonjour.]]
+[[River_1]]
+
+
+
+:: River_1 [PNJ] {"position":"850,3225","size":"100,100"}
+((if: $A1 is 'death'))[Vous n’êtes qu’une vil machine de chimères, qui corrompe la bonté de mes fidèles pour les transformer en de futiles sbires d’une rébellion insensée. Hier vous me preniez ma Cassandre, demain je prendrai votre tête.]
+((else:))[River. Balance. B Positif]
+[[River_2]]
+
+:: River_2 [PNJ] {"position":"850,3350","size":"100,100"}
+((if: $A1 is 'death'))[Vous vous croyez seigneur, mais vous n’êtes que l’adorateur du démon et il ne me faudra pas plus d’une preuve pour le prouver.]
+((else:))[Ma disciple… Cassandre. Il semblerait que des années de pratique et de dévouement n’ont jamais été suffisants pour effacer ce mauvais tempérament.]
+[[River_3]]
+
+:: River_3 [PNJ] {"position":"850,3475","size":"100,100"}
+((if: $A1 is 'death'))[Travaillez. Dites-moi tout. Je percerai vos mystères pour vous purifier de vos blasphèmes.]
+((else:))[J’ai d’abord cru à un miracle accordé par la Nouvelle Lune, mais la rumeur veut que vous soyez la raison de ce revirement soudain dans sa foi.]
+[[River_4]]
+
+:: River_4 [PNJ] {"position":"850,3600","size":"100,100"}
+((if: $A1 is 'death'))[Prénom XXX]
+((else:))[Je peine à croire qu’une machine aussi insignifiante que vous puisse être à l’origine d’une telle sainteté, et pourtant… je ne peux m’empêcher d’envier l’état de grâce qui lui a été accordé.]
+[[River_5]]
+
+:: River_5 [PNJ QUESTION NEWWEEK] {"position":"850,3725","size":"100,100"}
+((set: $R1 to ''))
+Dites-moi donc. Vers quelle direction ma foi doit se tourner pour retrouver son apothéose d’antan ?
+
+La Papesse[[R1HighPriestess]]
+L'Empereur[[R1Emperor]]
+L'Hermite[[R1Hermit]]
+Les Amoureux[[R1Lovers]]
+
+:: R1HighPriestess [VOYANTE] {"position":"775,3850","size":"100,100"}
+((set: $R1 to 'highpriestess'))
+La transcendance de la sagesse absolue n’est qu’à un pas. Arrêtez vos tracas futiles et plongez vous dans les mystères infinies de la recherche spirituelle. 
+[[River_6]]
+
+:: R1Emperor [VOYANTE] {"position":"925,3850","size":"100,100"}
+((set: $R1 to 'emperor'))
+N’ayez pas peur d’asseoir votre autorité, car c’est dans la discipline et la rigueur que vous apprendrez le sens du mot "protéger".
+[[River_6]] 
+
+:: R1Hermit [VOYANTE] {"position":"625,3850","size":"100,100"}
+((set: $R1 to 'hermit'))
+Écoutez-vous encore votre guide intérieur ? Ce sont parfois les murmures de la solitude qui révèlent en nous des vérités délaissées.
+[[River_6]]
+
+:: R1Lovers [VOYANTE] {"position":"1075,3850","size":"100,100"}
+((set: $R1 to 'lovers'))
+Une meilleure balance de vos choix vous permettra de trouver l’harmonie. N’oubliez pas que c’est dans l’Union que les valeurs s'alignent. 
+[[River_6]] 
+
+:: River_6 [PNJ] {"position":"850,4000","size":"100,100"}
+((if: $A1 is 'death'))[Mon plan pour vous défaire est déjà en action, je vous étudierez puis je vous démontrez pour que plus jamais personne n’écoute vos inepties païennes.]
+((else:))[Hmm… Je vois ce que vous voulez dire, mais rien n’y change, il m'est interdit de faire confiance à une machine païenne.]
+[[TransitionM1]]
+
+:: TransitionM1 [FADE] {"position":"850,4125","size":"100,100"}
+*Fondu au noir*
+[[M1_0]]
+
+:: M1_0 [DESCRIPTION] {"position":"700,4225","size":"100,100"}
+Un pas lent et régulier arrive jusqu’à votre porte.
+[[M1_1]]
+
+:: Eustache_0 [PNJ NEWCLIENT] {"position":"700,4400","size":"100,100"}
+((if: $S1 is 'death'))[A cause de vous mon quartier est sans dessus dessous. La mort de mon voisin a été un événement réellement atroce… Je ne le connaissais pas personnellement, mais personne ne mérite de mourir sur son lieu de travail.]
+((else-if: $R1 is 'highpriestess'))[Je ne sais pas ce que vous avez fait aux fidèles de la Nouvelle Lune, mais ils paraissent bien calmes en ce moment. Ils répètent, à qui veut l’entendre, de s’aimer les un les autres et que seul l’acceptation de l’autre permet d’atteindre un état de plénitude, le "Nirvana".]
+((else-if: $R1 is 'lovers'))[Je ne sais pas ce que vous avez fait aux fidèles de la Nouvelle Lune, mais ils paraissent bien calmes en ce moment. Ils répètent, à qui veut l’entendre, de s’aimer les un les autres et que seul l’acceptation de l’autre permet d’atteindre un état de plénitude, le "Nirvana".]
+((else-if: $R1 is 'emperor'))[Je ne sais pas ce que vous avez fait aux fidèles de la Nouvelle Lune, mais depuis que River est venu vous voir, il n’est même plus possible de se balader tranquillement dans la rue. Il paraît même qu’ils ont pris à part certaines personnes qu’ils considéraient comme hérétiques. Je prend d’énormes risques en venant ici.]
+((else-if: $R1 is 'hermit'))[Je ne sais pas ce que vous avez fait aux fidèles de la Nouvelle Lune, mais depuis que vous avez parlé à River, iel a pris sa retraite, laissant le peu de fidèles en charge... Seule la Lune sait ce qu'il adviendra de cette religion.]
+[[Eustache_1]] 
+
+
+:: Eustache_3 [PNJ QUESTION] {"position":"850,4550","size":"100,100"}
+((set: $M1 to ''))
+Comment puis-je protéger mes enfants de ce monde instable ?
+
+La Papesse[[M1HighPriestess]]
+L'Empereur[[M1Emperor]]
+L'Hermite[[M1Hermit]]
+Les Amoureux[[M1Lovers]]
+
+:: M1HighPriestess [VOYANTE] {"position":"625,4675","size":"100,100"}
+((set: $M1 to 'highpriestess'))
+C’est dans les mystères de votre sagesse intérieure que vous trouverez le chemin de la spiritualité.
+[[Eustache_4a]]
+
+:: M1Emperor [VOYANTE] {"position":"775,4675","size":"100,100"}
+((set: $M1 to 'emperor'))
+Structure et discipline sont les chemins les plus courts vers votre succès, gardez le cap et n’ayez pas peur. L’autorité vous montrera la voie du bonheur.
+[[Eustache_5b]]
+
+:: M1Hermit [VOYANTE] {"position":"925,4675","size":"100,100"}
+((set: $M1 to 'hermit'))
+Dans votre recherche de la vérité absolue, vous oubliez que c’est en vous que réside la plus grande des sagesses. 
+[[Eustache_5c]]
+
+:: M1Lovers [VOYANTE] {"position":"1075,4675","size":"100,100"}
+((set: $M1 to 'lovers'))
+C’est dans l’union que l’amour s’épanouit. Ouvrez votre esprit aux valeurs que vous n’avez pas choisies. 
+[[Eustache_5d]]
+
+:: Eustache_4a [PNJ] {"position":"625,4800","size":"100,100"}
+Vous avez raison ! La Nouvelle Lune m’a toujours guidée, alors je dois lui faire confiance. Il est temps pour moi de me reconnecter avec elle et de devenir le guide spirituel dont ma famille a besoin.
+[[TransitionA2]] 
+
+:: Eustache_5b [PNJ] {"position":"775,4800","size":"100,100"}
+Vous avez raison, je ne peux pas les laisser continuer comme ça. Je vais les reprendre en main. Ils ne sont pas capables de décider par eux-mêmes, je suis leur père et c’est mon devoir de les protéger.
+[[TransitionA2]] 
+
+:: Eustache_5c [PNJ] {"position":"925,4800","size":"100,100"}
+Vous avez raison ! La Nouvelle Lune m’a toujours guidée, alors je dois lui faire confiance. Il est temps pour moi de me reconnecter avec elle et de devenir le guide spirituel dont ma famille a besoin.
+[[TransitionA2]] 
+
+:: Eustache_5d [PNJ] {"position":"1075,4800","size":"100,100"}
+Vous avez raison. C'est important que j’accompagne mes enfants dans la voie qui est la leur. Seuls eux peuvent définir ce que sera leur propre vie. 
+[[TransitionA2]] 
+
+:: M1_1 [DESCRIPTION] {"position":"850,4250","size":"100,100"}
+Plusieurs minutes passent avant que la porte ne s’ouvre subitement.
+[[M1_2]]
+
+:: M1_2 [DESCRIPTION] {"position":"975,4275","size":"100,100"}
+Un homme à la stature imposante se dresse devant vous. Sur ses mains vous observerez une alliance ternie par des années d’un amour maintenant flétri.
+[[Eustache_0]]
+
+:: TransitionA2 [FADE] {"position":"850,4950","size":"100,100"}
+*Fondu au noir*
+[[A2_0]]
+
+:: A2_0 [DESCRIPTION] {"position":"850,5100","size":"100,100"}
+Vous reconnaissez le pas agile de Cassandre qui s’approche de vous.
+[[Cassandre_4]]
+
+:: Cassandre_4 [PNJ SOUND NEWCLIENT] {"position":"725,5175","size":"100,100"}
+((if: $A1 is 'death'))[Vous aviez raison, la Nouvelle Lune n’est que mensonge. Ma vie n’a cessé de s’améliorer depuis que je l’ai quittée.]
+((else:))[La Nouvelle Lune m’a guidée dans l'ascension au sein de l’ordre. Je n’aurai jamais pu espérer une évolution plus fulgurante.]
+[[Cassandre_5]]
+
+
+:: Cassandre_6 [PNJ QUESTION] {"position":"850,5350","size":"100,100"}
+((set: $A2 to ''))
+Dis-moi machine savante. Quelle est la voie à suivre pour atteindre mes ambitions ?
+
+La Papesse[[A2HighPriestess]]
+L'Empereur[[A2Emperor]]
+L'Hermite[[A2Hermit]]
+Les Amoureux[[A2Lovers]]
+
+:: A2HighPriestess [VOYANTE] {"position":"625,5500","size":"100,100"}
+((set: $A2 to 'highpriestess'))
+L’intuition a souvent été votre meilleure alliée. Ne craignez pas les mystères qui viendront se dresser face à vous. 
+[[Cassandre_7]]
+
+:: A2Emperor [VOYANTE] {"position":"775,5500","size":"100,100"}
+((set: $A2 to 'emperor'))
+Vous avez l’âme d’une leader et la discipline d’une passionnée. Il est temps pour vous d’assumer la responsabilité de votre autorité. 
+[[Cassandre_7]]
+
+:: A2Hermit [VOYANTE] {"position":"1075,5500","size":"100,100"}
+((set: $A2 to 'hermit'))
+Votre guide intérieur vous montrera la vérité. C’est dans solitude que votre esprit sera libéré.  
+[[Cassandre_7]]
+
+:: A2Lovers [VOYANTE] {"position":"925,5500","size":"100,100"}
+((set: $A2 to 'lovers'))
+Prenez un choix aligné à vos valeurs, car c’est en unissant vos forces que l’harmonie se jumelle au bonheur.
+[[Cassandre_7]]
+
+:: TransitionWeek3 [ENDOFWEEK] {"position":"850,5775","size":"100,100"}
+Semaine 3
+[[V1_0]]
+
+:: V1_0 [DESCRIPTION] {"position":"775,5900","size":"100,100"}
+Une présence jusqu’alors inconnue chamboule les meubles du couloirs, créant un vacarme chaotique. 
+[[V1_1]] 
+
+:: V1_1 [DESCRIPTION] {"position":"925,5925","size":"100,100"}
+Une ombre immense et cornue se dresse dans la pièce. Elle s’approche lentement de vous. 
+[[Marguerite_0]]
+
+:: Marguerite_0 [PNJ SOUND NEWCLIENT] {"position":"725,6050","size":"100,100"}
+((if: $A1 is 'highpriestess'))[((if: $A2 is 'highpriestess'))[La Nouvelle Lune est venue à moi, et je sais que la réponse que je cherche est en vous.]]
+((else:))[J’ai entendu dire que vous faisiez des miracles. Peut-être m’aiderez-vous à apporter la paix entre l’humanité et le bovin.]
+[[Marguerite_1]] 
+
+
+
+:: Marguerite_3 [PNJ QUESTION NEWWEEK] {"position":"850,6200","size":"100,100"}
+((set: $V1 to ''))
+Comment hisser le bovin au rang de l’humanité ?
+
+Le Chariot[[V1Chariot]]
+Les Amoureux[[V1Lovers]]
+La Mort[[V1Death]]
+L'Empereur[[V1Emperor]]
+
+:: V1Chariot [VOYANTE] {"position":"925,6350","size":"100,100"}
+((set: $V1 to 'chariot'))
+Pour que votre voyage se termine par un triomphe, trouvez la détermination d’imposer votre volonté. 
+[[Marguerite_4c]]
+
+:: V1Lovers [VOYANTE] {"position":"625,6350","size":"100,100"}
+((set: $V1 to 'lovers'))
+Pour aligner les valeurs et effacer vos différences, prouvez que c’est dans l’union que vous trouverez l’harmonie.
+[[Marguerite_4a]]
+
+:: V1Death [VOYANTE] {"position":"775,6350","size":"100,100"}
+((set: $V1 to 'death'))
+La transformation que vous espérez ne peut fournir de renouveau. Lâchez prise.
+[[Marguerite_4b]]
+
+:: V1Emperor [VOYANTE] {"position":"1075,6350","size":"100,100"}
+((set: $V1 to 'emperor'))
+La protection se trouve dans l’autorité et la discipline. Devenez leader pour créer la structure dont le monde à besoin. 
+[[Marguerite_4c]]
+
+:: Marguerite_4c [PNJ] {"position":"1000,6475","size":"100,100"}
+J’en étais sûre, il est temps que le règne bovin prenne place. Je n’oublierai pas l’influence que vous avez eu pour notre cause. 
+[[TransitionM2]]
+
+:: Marguerite_4a [PNJ] {"position":"625,6475","size":"100,100"}
+Je n’avais jamais envisagé d’aborder le problème sous cet angle. Il est vrai que les mentalités prennent du temps à changer. Il est peut-être l’heure pour moi de me reconnecter avec un camarade d’autrefois. 
+[[TransitionM2]]
+
+:: Marguerite_4b [PNJ] {"position":"775,6475","size":"100,100"}
+Ce n’est pas la réponse que j'espérais obtenir. Je… Je vais y réfléchir. 
+[[TransitionM2]]
+
+:: TransitionM2 [FADE] {"position":"850,6600","size":"100,100"}
+*Fondu en noir*
+[[M2_0]]
+
+:: M2_0 [DESCRIPTION] {"position":"850,6725","size":"100,100"}
+Soudainement, la porte s’ouvre. Vous reconnaissez la présence d’Eustache dans la pièce. Ce dernier s’installe face à vous. 
+[[Eustache_6]] 
+
+:: Eustache_6 [PNJ NEWCLIENT] {"position":"850,6850","size":"100,100"}
+((if: $V1 is 'lovers'))[((sound: 'Eustache_enerve'))[Qu’avez-vous fait ? Il est impossible que vous n’ayez pu avoir un rôle dans un tel événement.]]
+((else:))[((sound: 'Eustache_inquiet'))[J’ai suivi vos conseils, j’ai fais tout ce que je pouvais, mais maintenant c’est ma moitié qui ne supporte pas ce que je suis devenu.]]
+[[Eustache_7]]
+
+:: Eustache_9 [PNJ QUESTION INVERSE] {"position":"850,7100","size":"100,100"}
+((set: $M2 to ''))
+Par pitié, dites-moi comment sauver mon mariage ?
+
+Le Chariot Inversé[[M2Chariot!]]
+Les Amoureux Inversés[[M2Lovers!]]
+La Mort Inversée[[M2Death!]]
+L'Empereur Inversé[[M2Emperor!]]
+
+:: M2Chariot! [VOYANTE] {"position":"625,7225","size":"100,100"}
+((set: $M2 to 'chariot'))
+Vos échecs récents vous ont fait perdre le contrôle. Retrouver la direction qui vous a autrefois animée est le chemin le plus sûr vers la paix intérieure. 
+[[Eustache_Ya]]
+
+:: M2Lovers! [VOYANTE] {"position":"775,7225","size":"100,100"}
+((set: $M2 to 'lovers'))
+Vous avez récemment pris des décisions au résultat néfaste. Depuis, le conflit est à votre porte et la tentation vous guette. 
+[[Eustache_Ya]]
+
+:: M2Death! [VOYANTE] {"position":"925,7225","size":"100,100"}
+((set: $M2 to 'death'))
+Votre peur d’évoluer vous immunise au changement. Il est temps pour vous de retrouver les convictions qui vous font vivre pleinement. 
+[[Eustache_Ya]]
+
+:: M2Emperor! [VOYANTE] {"position":"1075,7225","size":"100,100"}
+((set: $M2 to 'emperor'))
+La désorganisation et le chaos règnent aujourd’hui dans votre vie. Il est temps pour vous de retrouver une place dominante et de laisser libre cours à l’expression de votre pouvoir. 
+[[Eustache_Ya]]
+
+:: Eustache_Ya [PNJ SOUND] {"position":"850,7350","size":"100,100"}
+((if: $V1 is 'lovers'))[((sound: 'Eustache_desespere'))[Une vache quand même…]]
+((else:))[((sound: 'Eustache_reconnaissant'))[Merci, merci encore. Je m’en vais de ce pas appliquer chaque mot de vos saintes paroles. Je ne vous serai jamais assez reconnaissant !]]
+[[TransitionP2]]
+
+
+:: TransitionP2 [FADE] {"position":"850,7500","size":"100,100"}
+*Fondu au noir*
+[[P2_0]]
+
+:: P2_0 [DESCRIPTION] {"position":"775,7625","size":"100,100"}
+Des pieds se traînant en marchant s’entendent distinctement jusque dans votre pièce.
+[[P2_1]]
+
+:: P2_1 [DESCRIPTION] {"position":"925,7650","size":"100,100"}
+Une ombre affalée se tient amorphe face à vous. Vous peinez à reconnaître Melvin.
+[[Melvin_4]]
+
+:: Melvin_4 [PNJ NEWCLIENT] {"position":"775,7775","size":"100,100"}
+((if: $V1 is 'emperor'))[La vache... CETTE vache !! Elle est en train de tout me prendre ! Mon poste, mon parti, tous mes électeurs...]
+((else-if: $V1 is 'chariot'))[La vache... CETTE vache !! Elle est en train de tout me prendre ! Mon poste, mon parti, tous mes électeurs...]
+((else-if: $P1 is 'highpriestess'))[((sound: 'melvin_agace'))[Je ne sais pas comment vous avez fait pour que la presse soit au courant.]]
+((else-if: $P1 is 'chariot'))[((sound: 'melvin_agace'))[Je ne sais pas comment vous avez fait pour que la presse soit au courant.]]
+((else-if: $P1 is 'death'))[((sound: 'melvin_desespere'))[J’ai l’impression que rien n’a changé depuis mon dernier passage….]]
+((else-if: $P1 is 'hermit'))[((sound: 'melvin_desespere'))[J’ai l’impression que rien n’a changé depuis mon dernier passage…]]
+[[Melvin_5]]
+
+
+:: Melvin_X [PNJ QUESTION] {"position":"850,8125","size":"100,100"}
+((set: $P2 to ''))
+Question Melvin 2
+
+Le Chariot[[P2Chariot]]
+Les Amoureux[[P2Lovers]]
+La Mort[[P2Death]]
+L'Empereur[[P2Emperor]]
+
+:: P2Chariot [VOYANTE] {"position":"625,8250","size":"100,100"}
+((set: $P2 to 'chariot'))
+Chariot
+[[Melvin_Ya]]
+
+:: P2Lovers [VOYANTE] {"position":"775,8250","size":"100,100"}
+((set: $P2 to 'lovers'))
+Lovers
+[[Melvin_Yb]]
+
+:: P2Death [VOYANTE] {"position":"925,8250","size":"100,100"}
+((set: $P2 to 'death'))
+Death
+[[Melvin_Yc]]
+
+:: P2Emperor [VOYANTE] {"position":"1075,8250","size":"100,100"}
+((set: $P2 to 'emperor'))
+Emperor
+[[Melvin_Yd]]
+
+:: Melvin_Ya [PNJ] {"position":"625,8375","size":"100,100"}
+
+[[TransitionEND]]
+
+:: Melvin_Yb [PNJ] {"position":"775,8375","size":"100,100"}
+[[TransitionEND]]
+
+:: Melvin_Yc [PNJ] {"position":"925,8375","size":"100,100"}
+
+[[TransitionEND]]
+
+:: Melvin_Yd [PNJ] {"position":"1075,8375","size":"100,100"}
+
+[[TransitionEND]]
+
+:: TransitionEND [END] {"position":"850,8550","size":"100,100"}
+END
+
+
+:: Eustache_1 [PNJ] {"position":"850,4425","size":"100,100"}
+((if: $S1 is 'death'))[Mes enfants se sont lancés corps et âme pour soutenir cette grève. Même si je soutiens leurs idées, il ne se passe plus un jour sans que mon cœur se déchire à l’idée de les voir se sacrifier dans ce combat.]
+((else-if: $R1 is 'highpriestess'))[La religion s’éloigne de plus en plus de la réalité de notre condition, mes enfants se perdent chaque jour un peu plus dans ces illusions. J’ai peur pour eux que le réveil soit brutal.]
+((else-if: $R1 is 'lovers'))[La religion s’éloigne de plus en plus de la réalité de notre condition, mes enfants se perdent chaque jour un peu plus dans ces illusions. J’ai peur pour eux que le réveil soit brutal.]
+((else-if: $R1 is 'emperor'))[Selon les nouvelles lois divine, je risque l’ostration par ma famille en venant ici. J’ai beau tout faire pour raisonner mes enfants, rien n’y fait, la parole de River fait foi sur tout.]
+((else-if: $R1 is 'hermit'))[Sans guide, mes enfants se perdent déjà dans les plaisirs futiles de la vie. J’ai du mal à être la figure dont ils auraient besoin pour mûrir.]
+[[Eustache_2]] 
+
+:: Eustache_2 [PNJ] {"position":"1000,4450","size":"100,100"}
+Bref, si vous pouviez m’aider. 
+Je suis Eustache. Lion. O Négatif.
+[[Eustache_3]] 
+
+:: Cassandre_5 [PNJ] {"position":"850,5225","size":"100,100"}
+((if: $R1 is 'highpriestess'))[River prêche l’abandon des désirs fugaces, ses fidèles se connectent de plus en plus entre eux et la spiritualité a atteint un point d’extase.]
+((else-if: $R1 is 'lovers'))[River prêche l’abandon des désirs fugaces, ses fidèles se connectent de plus en plus entre eux et la spiritualité a atteint un point d’extase. ]
+((else-if: $R1 is 'emperor'))[River a renforcé le contrôle de la religion, et le nombre de fidèles a augmenté de manière considérable. Un tribunal religieux s’est même instauré pour punir sévèrement les hérétiques.]
+((else-if: $A1 is 'death'))[River a dû ouvrir les yeux lui aussi, iel est parti et a abandonné cet ordre fugace. Il a compris que l’ordre n’était pas la réponse, la véritable spiritualité doit être trouvé ailleurs. Moi, je sais que la réponse se cache chez vous.]
+((else:))[River pense avoir trouvé sa spiritualité ailleurs. Je suis déçue par son choix d’abandonner notre ordre. La hiérarchie a changé, et c’est mon devoir de répondre à l’appel de la Nouvelle Lune.]
+[[Cassandre_6]]
+
+:: Cassandre_7 [PNJ SOUND] {"position":"850,5650","size":"100,100"}
+Merci. Je vais minutieusement analyser vos paroles…
+[[TransitionWeek3]] 
+
+:: Marguerite_1 [PNJ] {"position":"850,6075","size":"100,100"}
+((if: $A1 is 'highpriestess'))[((if: $A2 is 'highpriestess'))[Cassandre a été ma guide dans cette révélation. Depuis toutes petites, elle et moi jouons ensemble, et il m’est impossible de ne plus voir ce qu’elle m’a montré récemment. Je porte l’espoir de partager cette sagesse révélatrice à tous mes congénères.]]
+((else:))[J’ai l’espoir que vous acceptiez de prédire son avenir à une vache, je ne pense pas que votre art diffère en fonction du nombre de poils sur la tête de vos clients.]
+[[Marguerite_2]] 
+
+:: Marguerite_2 [PNJ] {"position":"975,6100","size":"100,100"}
+Marguerite. Vierge. F.
+[[Marguerite_3]] 
+
+:: Eustache_7 [PNJ] {"position":"1000,6900","size":"100,100"}
+((if: $V1 is 'lovers'))[((sound: 'Eustache_desespere'))[Ma moitié… Ma moitié m'a quittée… pour…]]
+((else:))[Il n’y a eu que vous pour sauver ma relation avec mes enfants…]
+[[Eustache_8]]
+
+:: Eustache_8 [PNJ] {"position":"850,6975","size":"100,100"}
+((if: $V1 is 'lovers'))[Pour une vache !]
+((else:))[Aujourd’hui, il n’y a que vous pour reconstruire mon couple !]
+[[Eustache_9]]
+
+:: Melvin_5 [PNJ] {"position":"925,7800","size":"100,100"}
+((if: $V1 is 'emperor'))[Il ne va plus rien me rester…]
+((else-if: $V1 is 'chariot'))[Il ne va plus rien me rester…]
+((else-if: $P1 is 'highpriestess'))[Je ne peux plus marcher quelques pas dans la rue, sans qu’une foule de personne ne se moque de moi. Ma vie politique est fichue…]
+((else-if: $P1 is 'chariot'))[Je ne peux plus marcher quelques pas dans la rue, sans qu’une foule de personne ne se moque de moi. Ma vie politique est fichue…]
+((else-if: $P1 is 'death'))[Je suis toujours en perte de vitesse dans les sondages, les gens m’oublient, je ne suis même plus l’ombre de l’homme que j’étais avant…]
+((else-if: $P1 is 'hermit'))[Je suis toujours en perte de vitesse dans les sondages, les gens m’oublient, je ne suis même plus l’ombre de l’homme que j’étais avant…]
+[[Melvin_6]]
+
+
+:: Melvin_6 [PNJ] {"position":"775,7950","size":"100,100"}
+Melvin_6
+[[Melvin_7]]
+
+:: Melvin_7 [PNJ] {"position":"925,7975","size":"100,100"}
+Melvin_7
+[[Melvin_X]]

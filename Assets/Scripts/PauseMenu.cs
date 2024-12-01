@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 public class PauseMenu : MonoBehaviour
 {
     [SerializeField] private GameObject pausePanel;
+    [SerializeField] private GameObject settingsPanel;
 
     private bool gameIsPaused;
 
@@ -39,6 +40,17 @@ public class PauseMenu : MonoBehaviour
         gameIsPaused = false;
         Time.timeScale = 1;
         pausePanel.SetActive(false);
+        CloseSettings();
+    }
+
+    public void Settings()
+    {
+        settingsPanel.SetActive(true);
+    }
+
+    public void CloseSettings()
+    {
+        settingsPanel.SetActive(false);
     }
 
     public void MainMenu()

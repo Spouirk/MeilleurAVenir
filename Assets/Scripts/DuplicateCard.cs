@@ -30,15 +30,12 @@ public class DuplicateCard : MonoBehaviour
 
     public void StartSpawnCards(Vector2[] positions, List<Card> cards, Vector3 startScale, Vector3 endScale, float dealTime)
     {
-        if (!hasSpawnedCard)
-        {
-            this.positions = positions;
-            this.cards = cards;
-            this.startScale = startScale;
-            this.endScale = endScale;
-            this.dealTime = dealTime;
-            StartCoroutine(SpawnCardsRoutine());
-        }
+        this.positions = positions;
+        this.cards = cards;
+        this.startScale = startScale;
+        this.endScale = endScale;
+        this.dealTime = dealTime;
+        StartCoroutine(SpawnCardsRoutine());
     }
 
     IEnumerator SpawnCardsRoutine()
