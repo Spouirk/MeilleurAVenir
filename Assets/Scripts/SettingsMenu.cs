@@ -17,7 +17,7 @@ public class SettingsMenu : MonoBehaviour
     void Start()
     {
         resolutions = Screen.resolutions
-                            .Where(resolution => resolution.width % 16 == 0 && resolution.height % 9 == 0)
+                            .Where(resolution => is169(resolution))
                             .Select(resolution => new Resolution {width = resolution.width, height = resolution.height}).Distinct().ToArray();
         resolutionDropDown.ClearOptions();
 
@@ -54,6 +54,13 @@ public class SettingsMenu : MonoBehaviour
     {
         Resolution resolution = resolutions[resolutionIndex];
         Screen.SetResolution(resolution.width, resolution.height, Screen.fullScreen);
+    }
+
+    private static bool is169(Resolution resolution)
+    {
+        int width = resolution.width;
+        int height = resolution.height;
+        return width / height == 16 / 9 && (width % height) % (16 % 9) == 0 && width % 16 == 0 && height % 9 == 0;
     }
 
 }
