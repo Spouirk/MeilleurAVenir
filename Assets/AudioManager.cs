@@ -7,6 +7,7 @@ public class AudioManager : MonoBehaviour
     public static AudioManager Instance;
 
     [Header("Audio Sources")]
+    [SerializeField] AudioSource mainMusic;
     [SerializeField] AudioSource cardUsedSound;
     [SerializeField] AudioSource cardHoverSound;
     [SerializeField] AudioSource cardDealSound;
@@ -22,6 +23,7 @@ public class AudioManager : MonoBehaviour
         if (Instance == null)
         {
             Instance = this;
+            DontDestroyOnLoad(gameObject);
         }
         else
         {
