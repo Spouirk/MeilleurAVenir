@@ -18,7 +18,8 @@ Le meilleur reste à venir
   "FADE": "orange",
   "NEWCLIENT": "purple",
   "QUESTION": "blue",
-  "NEWWEEK": "yellow"
+  "NEWWEEK": "yellow",
+  "INVERSE": "purple"
  }
 }
 
@@ -199,7 +200,7 @@ C’est en parlant de magie païenne que ton nom s’est fait connaître, pourta
 De loin, des pas lourds et confiants grondent, s’approchant avec assurance. Soudain, une carrure imposante se présente devant vous.
 [[Melvin_0]]
 
-:: Melvin_1 [PNJ QUESTION] {"position":"850,2275","size":"100,100"}
+:: Melvin_1 [PNJ QUESTION INVERSE] {"position":"850,2275","size":"100,100"}
 ((set: $P1 to ''))
 Si votre temps se perd à aider les petites gens, il me paraît bien normal que moi aussi je bénéficie de vos talents.
 

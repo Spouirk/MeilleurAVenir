@@ -57,6 +57,14 @@ public class DialogueObject {
             return tags.Contains( "NEWWEEK" );
         }
 
+        internal bool IsInverse() {
+            return tags.Contains( "INVERSE" );
+        }
+
+        internal bool IsEndOfWeek() {
+            return tags.Contains( "ENDOFWEEK" );
+        }
+
         // TODO proper override
         public string Print() {
             return "";//string.Format( "Node {  Title: '%s',  Tag: '%s',  Text: '%s'}", title, tag, text );
