@@ -29,18 +29,21 @@ public class PauseMenu : MonoBehaviour
 
     private void PauseGame() {
         gameIsPaused = true;
+        Time.timeScale = 0;
         pausePanel.SetActive(true);
     }
 
     public void ResumeGame() 
     {
         gameIsPaused = false;
+        Time.timeScale = 1;
         pausePanel.SetActive(false);
     }
 
     public void MainMenu()
     {
         gameIsPaused = false;
+        Time.timeScale = 1;
         SceneManager.LoadScene("Menu");
     }
 }
