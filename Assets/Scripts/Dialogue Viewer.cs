@@ -68,6 +68,7 @@ public class DialogueViewer : MonoBehaviour
 
     private void OnNodeEntered(Node newNode)
     {
+        CardManager.Instance.canPlayCard = false;
         if (newNode.isDescription())
         {
             ShowDescription(newNode);
